@@ -73,10 +73,10 @@ Common combos
 .. click:: _bumpwright_click:bump
    :prog: bumpwright bump
 
-history
--------
+history – list & rollback releases
+---------------------------------
 
-List git tags, show statistics, or roll back a tagged release.
+List releases, show statistics, or roll back a tagged release.
 
 When to use
 ^^^^^^^^^^^

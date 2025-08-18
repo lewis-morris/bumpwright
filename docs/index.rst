@@ -101,6 +101,15 @@ Primary use cases
 
 .. toctree::
    :maxdepth: 1
+   :caption: Usage
+
+   usage/init
+   usage/decide
+   usage/bump
+   usage/history
+
+.. toctree::
+   :maxdepth: 1
    :caption: Versioning
 
    concepts/versioning
