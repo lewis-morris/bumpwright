@@ -1,57 +1,57 @@
-name: bumpwright auto bump
-
-on:
-  push:
-    branches:
-      - master
-      - main
-
-concurrency:
-  group: bumpwright-bump-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  bump:
-    # Prevent infinite loops when this job's own push triggers the workflow
-    if: ${{ github.actor != 'github-actions[bot]' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout (full history + tags)
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-          fetch-tags: true
-          persist-credentials: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-          cache: 'pip'
-
-      - name: Install bumpwright (editable)
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e .
-
-      - name: Configure git author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump version, update changelog, commit & tag
-        run: |
-          bumpwright bump --changelog CHANGELOG.md --commit --tag --format md
-
-      - name: Show local tags (before push)
-        run: git tag --list --sort=-creatordate | head -n 10
-
-      - name: Push commit
-        run: git push origin HEAD:${{ github.ref_name }}
-
-      # Use --tags to push lightweight tags too (not only annotated)
-      - name: Push tags
-        run: git push --tags
+#name: bumpwright auto bump
+#
+#on:
+#  push:
+#    branches:
+#      - master
+#      - main
+#
+#concurrency:
+#  group: bumpwright-bump-${{ github.ref }}
+#  cancel-in-progress: true
+#
+#jobs:
+#  bump:
+#    # Prevent infinite loops when this job's own push triggers the workflow
+#    if: ${{ github.actor != 'github-actions[bot]' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') }}
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#
+#    steps:
+#      - name: Checkout (full history + tags)
+#        uses: actions/checkout@v5
+#        with:
+#          fetch-depth: 0
+#          fetch-tags: true
+#          persist-credentials: true
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.x'
+#          cache: 'pip'
+#
+#      - name: Install bumpwright (editable)
+#        run: |
+#          python -m pip install --upgrade pip
+#          python -m pip install -e .
+#
+#      - name: Configure git author
+#        run: |
+#          git config user.name "github-actions[bot]"
+#          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#
+#      - name: Bump version, update changelog, commit & tag
+#        run: |
+#          bumpwright bump --changelog CHANGELOG.md --commit --tag --format md
+#
+#      - name: Show local tags (before push)
+#        run: git tag --list --sort=-creatordate | head -n 10
+#
+#      - name: Push commit
+#        run: git push origin HEAD:${{ github.ref_name }}
+#
+#      # Use --tags to push lightweight tags too (not only annotated)
+#      - name: Push tags
+#        run: git push --tags
