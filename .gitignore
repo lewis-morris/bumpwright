@@ -1,0 +1,9 @@
+/.venv/
+/docs/build/
+/bumpwright.egg-info/
+/bumpwright.egg-info/
+/build/
+__pycache__/
+*.pyc
+.coverage
+coverage.xml

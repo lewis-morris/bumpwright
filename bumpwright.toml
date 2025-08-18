@@ -1,0 +1,19 @@
+[project]
+package = "bumpwright"
+public_roots = ["./bumpwright/"]
+
+[ignore]
+paths = ["tests/**", "docs/**", "build/**", ".venv/**"]
+
+[rules]
+return_type_change = "minor"  # or "major"
+
+[analysers]
+cli = true
+
+[changelog]
+path = "CHANGELOG.md"
+repo_url = "https://github.com/lewis-morris/bumpwright"
+
+[version]
+scheme = "semver"

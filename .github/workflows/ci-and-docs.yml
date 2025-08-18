@@ -1,0 +1,137 @@
+name: CI & Docs
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+# Required for Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Avoid parallel Pages deployments racing
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Ruff lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ruff
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Run ruff
+        run: |
+          ruff check --output-format=github --no-cache .
+
+  tests:
+    name: Unit tests (with coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project + test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest pytest-cov
+
+      - name: Run pytest with coverage (fail under 85%)
+        run: |
+          pytest -q \
+            --cov=bumpwright --cov-report=term-missing \
+            --cov-report=xml:coverage.xml --cov-fail-under=85
+
+      - name: Upload coverage XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+          if-no-files-found: warn
+
+      - name: Upload coverage HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: htmlcov
+          path: htmlcov
+          if-no-files-found: ignore
+
+  docs:
+    name: Build Sphinx docs + upload artifact
+    runs-on: ubuntu-latest
+    needs: [lint, tests]          # wait for both, but do not block on failure
+    if: ${{ always() }}           # <-- run even if lint/tests failed
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install docs deps
+        run: |
+          python -m pip install --upgrade pip
+          # If you use extras for docs:
+          pip install -e .[docs]
+          # If no extras, uncomment and pin what you need:
+          # pip install sphinx sphinx-design myst-parser furo
+
+      - name: Configure Pages
+        # Helps the deploy action compute the correct base URL
+        uses: actions/configure-pages@v5
+
+      - name: Build Sphinx (HTML)
+        run: |
+          sphinx-build --keep-going -b html docs docs/_build/html
+          # Add "-W" if you want warnings to fail the docs job:
+          # sphinx-build -W --keep-going -b html docs docs/_build/html
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: docs
+    # Always attempt to deploy on pushes to master, regardless of upstream job results
+    if: ${{ always() && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
