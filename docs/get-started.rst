@@ -209,11 +209,9 @@ Global options
 
 Commands
 ~~~~~~~~
+Detailed guides for individual commands:
 
-.. toctree::
-   :maxdepth: 1
-
-   usage/init
-   usage/decide
-   usage/bump
-   usage/history
+- :doc:`init – create a baseline <usage/init>`
+- :doc:`decide – compare without changing files <usage/decide>`
+- :doc:`bump – update version files <usage/bump>`
+- :doc:`history – list & rollback releases <usage/history>`

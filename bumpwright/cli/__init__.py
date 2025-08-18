@@ -291,8 +291,10 @@ def _build_history_subparser(
 
     parser = subparsers.add_parser(
         "history",
-        help="List existing git tags",
-        description="List git tags with their version numbers.",
+        help="List and roll back releases",
+        description=(
+            "List releases with their version numbers or roll back a tagged release."
+        ),
     )
     parser.add_argument(
         "--format",
