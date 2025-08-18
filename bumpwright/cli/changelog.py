@@ -91,7 +91,7 @@ def _build_changelog(args: Any, new_version: str) -> str | None:
         contributors_raw = collect_contributors(base, args.head)
     except subprocess.CalledProcessError as exc:
         logger.warning("Failed to collect contributors: %s", exc)
-        return None
+        contributors_raw = []
     contributors: list[dict[str, str | None]] = []
     for name, email in contributors_raw:
         link = None

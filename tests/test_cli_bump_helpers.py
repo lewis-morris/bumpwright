@@ -265,6 +265,32 @@ def test_build_changelog_handles_tag_error(monkeypatch) -> None:
     assert result == "Version=0.2.0\n"
 
 
+def test_build_changelog_handles_contributor_error(monkeypatch) -> None:
+    """_build_changelog proceeds when contributor collection fails."""
+
+    args = argparse.Namespace(
+        changelog="CHANGELOG.md",
+        head="HEAD",
+        repo_url=None,
+        changelog_template=None,
+        changelog_exclude=[],
+    )
+    monkeypatch.setattr(
+        "bumpwright.cli.changelog.collect_commits", lambda base, head: []
+    )
+    monkeypatch.setattr("bumpwright.cli.changelog.last_release_commit", lambda: None)
+    monkeypatch.setattr(
+        "bumpwright.cli.changelog._read_template", lambda path: "Version={{ version }}"
+    )
+
+    def blow_up(base: str, head: str) -> list[tuple[str, str]]:
+        raise subprocess.CalledProcessError(1, ["git", "shortlog"])
+
+    monkeypatch.setattr("bumpwright.cli.changelog.collect_contributors", blow_up)
+    result = _build_changelog(args, "0.2.0")
+    assert result == "Version=0.2.0\n"
+
+
 def test_build_changelog_includes_repo_links(monkeypatch) -> None:
     """Commit entries include repository links when ``repo_url`` is set."""
 
