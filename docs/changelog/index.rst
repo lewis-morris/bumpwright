@@ -1,5 +1,5 @@
-Changelog
-=========
+Changelog & Templates
+======================
 
 See :doc:`../usage/bump` for command examples and instructions on generating
 release notes.

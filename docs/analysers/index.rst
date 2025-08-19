@@ -1,13 +1,13 @@
-Analysers
-=========
+Analyzers Guide
+===============
 
-Analysers examine different facets of your project to detect API changes.
-Bumpwright ships optional analysers for the :doc:`CLI <cli>`, :doc:`gRPC <grpc>` services,
+Analyzers inspect different facets of your project to detect API changes.
+Bumpwright ships optional analyzers for the :doc:`CLI <cli>`, :doc:`gRPC <grpc>` services,
 :doc:`web routes <web_routes>`, :doc:`database migrations <migrations>`, :doc:`OpenAPI documents <openapi>`
-and :doc:`GraphQL schemas <graphql>`. The table below lists each analyser, the key used
+and :doc:`GraphQL schemas <graphql>`. The table below lists each analyzer, the key used
 to configure it, and the CLI flag to enable it for a single run.
 
-.. list-table:: Available analysers
+.. list-table:: Available analyzers
    :header-rows: 1
 
    * - Analyser
@@ -32,7 +32,7 @@ to configure it, and the CLI flag to enable it for a single run.
      - ``graphql``
      - ``--enable-analyser graphql``
 
-Enable analysers in ``bumpwright.toml``:
+Enable analyzers in ``bumpwright.toml``:
 
 .. code-block:: toml
 
@@ -50,7 +50,7 @@ Enable analysers in ``bumpwright.toml``:
    [openapi]
    paths = ["openapi.yaml"]
 
-You can also toggle analysers per invocation with the command-line flags
+You can also toggle analyzers per invocation with the command-line flags
 ``--enable-analyser`` and ``--disable-analyser``.
 
 Python API analyser
