@@ -135,7 +135,7 @@ def test_resolve_pyproject_missing() -> None:
 
 
 def test_display_result_json(caplog) -> None:
-    args = argparse.Namespace(format="json")
+    args = argparse.Namespace(output_fmt="json")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("pyproject.toml")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
@@ -146,7 +146,7 @@ def test_display_result_json(caplog) -> None:
 
 
 def test_display_result_text_skipped(caplog) -> None:
-    args = argparse.Namespace(format="text")
+    args = argparse.Namespace(output_fmt="text")
     vc = VersionChange(
         "0.1.0",
         "0.2.0",
@@ -512,7 +512,7 @@ def test_resolve_pyproject_uses_find(
 def test_display_result_md(caplog: pytest.LogCaptureFixture) -> None:
     """Markdown format lists updated and skipped files."""
 
-    args = argparse.Namespace(format="md")
+    args = argparse.Namespace(output_fmt="md")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("a")], [Path("b")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
