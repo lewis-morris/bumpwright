@@ -33,7 +33,7 @@ Bumpwright compares two Git references—usually the last release tag and the cu
 - **Static analysis limits** – cannot account for runtime-specific changes or internal logic.
 - **Python 3.11+** – focuses on Python projects and requires Python 3.11 or newer.
 
-Get started with the [Get Started guide](https://lewis-morris.github.io/bumpwright/get-started.html) or dive into the [Quickstart](https://lewis-morris.github.io/bumpwright/get-started.html#quickstart).
+Get started with the [Quickstart guide](https://lewis-morris.github.io/bumpwright/quickstart.html).
 
 ---
 
@@ -46,7 +46,7 @@ pip install bumpwright  # Python 3.11+
 Bumpwright now uses Python's built-in `tomllib`, removing the need for the
 external `tomli` dependency.
 
-Full details: [Installation](https://lewis-morris.github.io/bumpwright/get-started.html#installation)
+Full details: [Installation](https://lewis-morris.github.io/bumpwright/quickstart.html#installation)
 
 ---
 
@@ -63,7 +63,7 @@ bumpwright decide
 bumpwright bump --commit --tag
 ```
 
-What the decision means and examples: [Quickstart](https://lewis-morris.github.io/bumpwright/get-started.html#quickstart) • Command flags: [Usage → bump](https://lewis-morris.github.io/bumpwright/usage/bump.html)
+What the decision means and examples: [Quickstart](https://lewis-morris.github.io/bumpwright/quickstart.html) • Command flags: [Usage → bump](https://lewis-morris.github.io/bumpwright/usage/bump.html)
 
 | Command | Purpose |
 |---------|---------|

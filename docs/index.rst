@@ -1,158 +1,83 @@
-bumpwright documentation
-========================
+Bumpwright
+==========
 
-.. |coverage| image:: _static/badges/coverage.svg
-   :alt: test coverage
-.. |version| image:: _static/badges/version.svg
-   :alt: latest version
-.. |python| image:: _static/badges/python.svg
-   :alt: supported Python versions
-.. |license| image:: _static/badges/license.svg
-   :alt: license
+Bumpwright checks your project's public API to suggest the correct semantic version bump. It compares your code to a baseline and reports whether the next release should be a patch, minor, or major update.
 
-|coverage| |version| |python| |license|
+Why
+---
+- Avoid missed breaking changes when commit messages fall short.
+- Automate version numbers and changelog generation.
 
-Introduction
-------------
+How
+---
+- Compare the current commit to a recorded baseline.
+- Optional analysers inspect CLIs, web routes, migrations, and more.
 
-Bumpwright is an automated semantic versioning tool that scans your code changes—not just commit messages—to suggest the right next version. In a single command, it compares your latest code against the last release and tells you whether to bump the version by a patch, minor, or major, taking the guesswork out of releases for maintainers of libraries and services with stable interfaces.
+Pros
+----
+- Accurate bump suggestions based on the public API.
+- Flexible configuration and pluggable analysers.
+- Generates release notes for you.
 
-Overview
---------
+Cons
+----
+- Requires a Git baseline commit.
+- Static analysis can't cover runtime behaviour.
+- Python 3.11+ only.
 
-What & Why
-~~~~~~~~~~
-
-Traditional release tools rely on commit messages, which can be inconsistent. Bumpwright inspects the public API directly to decide the next version, so breaking changes are caught even when commit messages miss them. It can also update version strings and generate changelog entries automatically, streamlining the release process.
-
-How It Works
-~~~~~~~~~~~~
-
-Bumpwright compares two Git references—typically the last release tag and the current commit—and detects changes in your code’s public interface. Removed functions or changed signatures trigger a major bump, new features result in a minor bump, and bug fixes or small tweaks lead to a patch bump. Static analysis and optional analysers (for CLI commands, web routes, migrations, and more) inform these decisions. You can then apply the suggestion, update files, and optionally render changelog notes.
-
-Key Benefits
-~~~~~~~~~~~~
-
-- **Simplicity** – run a single command to see how your API changed.
-- **Accuracy** – catches breaking changes that commit messages may miss.
-- **Flexibility** – configurable analysers and settings to fit your workflow.
-- **Automation** – update version files and generate changelog entries.
-
-Trade-offs / Constraints
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-- **Baseline required** – needs a baseline reference (e.g., prior release tag); run ``bumpwright init`` to mark it.
-- **Static analysis limits** – cannot account for runtime-specific changes or internal logic.
-- **Python 3.11+** – focuses on Python projects and requires Python 3.11 or newer.
-
-To get started immediately, try the following commands:
-
-.. code-block:: bash
-
-   bumpwright init
-   bumpwright decide
-
-New to Bumpwright? Start with the :doc:`get-started`.
-
-.. grid:: 1 2 2 2
-   :gutter: 2
-
-   .. card:: New to Bumpwright?
-      :link: get-started
-      :link-type: doc
-
-   .. card:: Need configuration details?
-      :link: concepts/configuration
-      :link-type: doc
-
-   .. card:: Looking for recipes?
-      :link: guides/index
-      :link-type: doc
-
-   .. card:: CLI reference
-      :link: cli_reference
-      :link-type: doc
-
-Release workflow at a glance
-----------------------------
-
-.. list-table::
-   :header-rows: 1
-
-   * - Task
-     - Purpose
-   * - :doc:`init <usage/init>`
-     - Record the current state as a baseline.
-   * - :doc:`decide <usage/decide>`
-     - Analyse changes and suggest the bump level.
-   * - :doc:`bump <usage/bump>`
-     - Apply the version change and update files.
-   * - :doc:`history <usage/history>`
-     - Review previous bump decisions.
+New to Bumpwright? Start with the :doc:`quickstart`.
 
 .. toctree::
+   :caption: Quickstart
    :maxdepth: 1
-   :caption: Get Started
 
-   get-started
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Usage
-
-   usage/init
-   usage/decide
-   usage/bump
-   usage/history
+   quickstart
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Versioning
-
-   concepts/versioning
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Configuration
-
-   concepts/configuration
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Guides
-
-   guides/index
-   troubleshooting
-
-.. toctree::
-   :maxdepth: 1
-   :caption: CI/CD
-
-   ci/github-actions
-
-.. toctree::
-   :maxdepth: 1
    :caption: CLI Reference
+   :maxdepth: 1
 
    cli_reference
 
 .. toctree::
+   :caption: Configuration Reference
    :maxdepth: 1
-   :caption: Changelog
 
-   changelog/index
+   concepts/configuration
 
 .. toctree::
+   :caption: Analyzers Guide
    :maxdepth: 1
-   :caption: Analysers
 
    analysers/index
 
 .. toctree::
+   :caption: Versioning Concepts
    :maxdepth: 1
-   :caption: Project
 
-   glossary
+   concepts/versioning
+
+.. toctree::
+   :caption: Changelog & Templates
+   :maxdepth: 1
+
+   changelog/index
+
+.. toctree::
+   :caption: Recipes / How-To Guides
+   :maxdepth: 2
+
+   guides/index
+
+.. toctree::
+   :caption: FAQ / Troubleshooting
+   :maxdepth: 1
+
+   faq
+
+.. toctree::
+   :caption: Contributing & Roadmap
+   :maxdepth: 1
+
    contributing
    roadmap
-

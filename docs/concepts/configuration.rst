@@ -1,5 +1,5 @@
-Configuration
-=============
+Configuration Reference
+=======================
 
 ``bumpwright`` reads settings from ``bumpwright.toml``. Missing sections fall
 back to built-in defaults. Use ``--config`` to point to an alternative file.
