@@ -510,7 +510,7 @@ def test_history_rollback_tag_delete_failure(
     monkeypatch.chdir(repo)
     with caplog.at_level(logging.ERROR):
         res = history_command(
-            argparse.Namespace(format="text", stats=False, rollback="v0.2.0")
+            argparse.Namespace(output_fmt="text", stats=False, rollback="v0.2.0")
         )
     assert res == 1
     assert "Failed to delete tag v0.2.0" in caplog.text

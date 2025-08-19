@@ -180,6 +180,7 @@ def _build_bump_subparser(
     )
     parser.add_argument(
         "--format",
+        dest="output_fmt",
         choices=["text", "md", "json"],
         default=os.getenv("BUMPWRIGHT_FORMAT", "text"),
         help="Output style: plain text, Markdown, or machine-readable JSON.",
@@ -298,6 +299,7 @@ def _build_history_subparser(
     )
     parser.add_argument(
         "--format",
+        dest="output_fmt",
         choices=["text", "md", "json"],
         default=os.getenv("BUMPWRIGHT_FORMAT", "text"),
         help="Output style: plain text, Markdown, or machine-readable JSON.",

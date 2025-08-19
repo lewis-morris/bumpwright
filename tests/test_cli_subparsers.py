@@ -37,7 +37,7 @@ def test_build_bump_subparser_registers_arguments() -> None:
         "head",
         "enable_analyser",
         "disable_analyser",
-        "format",
+        "output_fmt",
         "repo_url",
         "pyproject",
         "version_path",
@@ -63,4 +63,4 @@ def test_build_decide_subparser_registers_command() -> None:
     assert sub.choices["decide"] is decide_parser
     assert decide_parser.get_default("func") is decide_command
     dests = {action.dest for action in decide_parser._actions}
-    assert {"base", "head", "format", "emit_changelog", "explain"} <= dests
+    assert {"base", "head", "output_fmt", "emit_changelog", "explain"} <= dests

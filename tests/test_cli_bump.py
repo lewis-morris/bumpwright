@@ -17,7 +17,7 @@ def _args(commit: bool = False, tag: bool = False) -> argparse.Namespace:
         config="bumpwright.toml",
         base=None,
         head="HEAD",
-        format="text",
+        output_fmt="text",
         repo_url=None,
         enable_analyser=[],
         disable_analyser=[],

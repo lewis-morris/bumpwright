@@ -76,7 +76,7 @@ def init(args: argparse.Namespace, summary: str | None) -> int:
 @click.option("--head", default="HEAD", show_default=True, help="Head git reference.")
 @click.option(
     "--format",
-    "format_",
+    "output_fmt",
     type=click.Choice(["text", "md", "json"]),
     default="text",
     show_default=True,
@@ -127,7 +127,7 @@ def decide(
     args: argparse.Namespace,
     base: str | None,
     head: str,
-    format_: str,
+    output_fmt: str,
     emit_changelog: bool,
     explain: bool,
     repo_url: str | None,
@@ -141,7 +141,7 @@ def decide(
 
     args.base = base
     args.head = head
-    args.format = format_
+    args.output_fmt = output_fmt
     args.emit_changelog = emit_changelog
     args.explain = explain
     args.repo_url = repo_url
@@ -164,7 +164,7 @@ def decide(
 @click.option("--head", default="HEAD", show_default=True, help="Head git reference.")
 @click.option(
     "--format",
-    "format_",
+    "output_fmt",
     type=click.Choice(["text", "md", "json"]),
     default="text",
     show_default=True,
@@ -271,7 +271,7 @@ def bump(args: argparse.Namespace, **kwargs: object) -> int:
             head (str): Git reference representing the working tree. Defaults
             to ``HEAD``.
 
-            format_ (str): Output format: ``text`` (default), ``md`` for
+            output_fmt (str): Output format: ``text`` (default), ``md`` for
             Markdown, or ``json`` for machine-readable output.
 
             repo_url (str | None): Base repository URL used to build commit
@@ -326,14 +326,13 @@ def bump(args: argparse.Namespace, **kwargs: object) -> int:
     params["version_path"] = list(params.get("version_path", []))
     params["version_ignore"] = list(params.get("version_ignore", []))
     params["changelog_exclude"] = list(params.get("changelog_exclude", []))
-    params["format"] = params.pop("format_")
     return bump_command(argparse.Namespace(**params))
 
 
 @cli.command()
 @click.option(
     "--format",
-    "format_",
+    "output_fmt",
     type=click.Choice(["text", "md", "json"]),
     default="text",
     show_default=True,
@@ -362,7 +361,7 @@ def bump(args: argparse.Namespace, **kwargs: object) -> int:
 @click.pass_obj
 def history(
     args: argparse.Namespace,
-    format_: str,
+    output_fmt: str,
     local_time: bool,
     stats: bool,
     rollback: str | None,
@@ -372,7 +371,7 @@ def history(
 
     Args:
         args: Parsed command-line arguments from :func:`cli`.
-        format_: Desired output format.
+        output_fmt: Desired output format.
         stats: Whether to include diff statistics between tags.
         rollback: Tag to remove and restore to the previous commit.
         purge: Remove all bumpwright release tags and reset versioned files.
@@ -381,7 +380,7 @@ def history(
         Exit status code, where ``0`` indicates success and ``1`` an error.
     """
 
-    args.format = format_
+    args.output_fmt = output_fmt
     args.local_time = local_time
     args.stats = stats
     args.rollback = rollback

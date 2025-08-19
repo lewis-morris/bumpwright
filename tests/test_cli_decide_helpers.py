@@ -13,22 +13,26 @@ from bumpwright.config import Config
 def test_build_api_skips_unparsed_file(monkeypatch: pytest.MonkeyPatch) -> None:
     """Files that fail to parse are ignored."""
 
-    monkeypatch.setattr(decide, "list_py_files_at_ref", lambda ref, roots, ignore_globs=None: ["mod.py"])
+    monkeypatch.setattr(
+        decide, "list_py_files_at_ref", lambda ref, roots, ignore_globs=None: ["mod.py"]
+    )
     monkeypatch.setattr(decide, "parse_python_source", lambda ref, path: None)
     api = decide._build_api_at_ref("HEAD", ["."], [], [])
     assert api == {}
 
 
-def test_add_decide_arguments_includes_format() -> None:
+def test_add_decide_arguments_includes_output_fmt() -> None:
     """Parser gains the ``--format`` option with default ``text``."""
 
     parser = argparse.ArgumentParser()
     decide.add_decide_arguments(parser)
     args = parser.parse_args([])
-    assert args.format == "text"
+    assert args.output_fmt == "text"
 
 
-def test_decide_only_md_format(monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture) -> None:
+def test_decide_only_md_format(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
     """Markdown output is produced when requested."""
 
     cfg = Config()
@@ -37,11 +41,13 @@ def test_decide_only_md_format(monkeypatch: pytest.MonkeyPatch, caplog: pytest.L
         head="HEAD",
         enable_analyser=None,
         disable_analyser=None,
-        format="md",
+        output_fmt="md",
         explain=False,
     )
     monkeypatch.setattr(decide, "_collect_impacts", lambda b, h, c, a: [])
-    monkeypatch.setattr(decide, "decide_bump", lambda impacts: Decision("patch", 1.0, []))
+    monkeypatch.setattr(
+        decide, "decide_bump", lambda impacts: Decision("patch", 1.0, [])
+    )
     with caplog.at_level(logging.INFO):
         assert decide._decide_only(args, cfg) == 0
     assert "**bumpwright** suggests" in caplog.text
