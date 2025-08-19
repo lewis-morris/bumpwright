@@ -15,11 +15,35 @@ bumpwright documentation
 Introduction
 ------------
 
-Bumpwright is a static analysis tool that compares two Git references and
-recommends the appropriate semantic version bump. Unlike tools such as
-``bump2version`` or ``python-semantic-release`` that rely on manual hints or
-commit messages, Bumpwright inspects the public API itself, making it ideal for
-libraries and services that expose stable interfaces.
+Bumpwright is an automated semantic versioning tool that scans your code changes—not just commit messages—to suggest the right next version. In a single command, it compares your latest code against the last release and tells you whether to bump the version by a patch, minor, or major, taking the guesswork out of releases for maintainers of libraries and services with stable interfaces.
+
+Overview
+--------
+
+What & Why
+~~~~~~~~~~
+
+Traditional release tools rely on commit messages, which can be inconsistent. Bumpwright inspects the public API directly to decide the next version, so breaking changes are caught even when commit messages miss them. It can also update version strings and generate changelog entries automatically, streamlining the release process.
+
+How It Works
+~~~~~~~~~~~~
+
+Bumpwright compares two Git references—typically the last release tag and the current commit—and detects changes in your code’s public interface. Removed functions or changed signatures trigger a major bump, new features result in a minor bump, and bug fixes or small tweaks lead to a patch bump. Static analysis and optional analysers (for CLI commands, web routes, migrations, and more) inform these decisions. You can then apply the suggestion, update files, and optionally render changelog notes.
+
+Key Benefits
+~~~~~~~~~~~~
+
+- **Simplicity** – run a single command to see how your API changed.
+- **Accuracy** – catches breaking changes that commit messages may miss.
+- **Flexibility** – configurable analysers and settings to fit your workflow.
+- **Automation** – update version files and generate changelog entries.
+
+Trade-offs / Constraints
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Baseline required** – needs a baseline reference (e.g., prior release tag); run ``bumpwright init`` to mark it.
+- **Static analysis limits** – cannot account for runtime-specific changes or internal logic.
+- **Python 3.11+** – focuses on Python projects and requires Python 3.11 or newer.
 
 To get started immediately, try the following commands:
 
@@ -49,13 +73,6 @@ New to Bumpwright? Start with the :doc:`get-started`.
       :link: cli_reference
       :link-type: doc
 
-Who is this for?
------------------
-
-If you're new to release automation, begin with the :doc:`Get Started guide <get-started>`.
-Experienced users can dive into the :doc:`Guides <guides/index>` or consult the
-:doc:`CLI reference <cli_reference>` directly.
-
 Release workflow at a glance
 ----------------------------
 
@@ -72,26 +89,6 @@ Release workflow at a glance
      - Apply the version change and update files.
    * - :doc:`history <usage/history>`
      - Review previous bump decisions.
-
-Benefits
-~~~~~~~~
-
-- **Simplicity** – run a single command to see how your API changed.
-- **Flexibility** – enable analysers and override defaults to fit your workflow.
-- **Accuracy** – catch breaking changes that commit messages may miss.
-
-Trade-offs
-~~~~~~~~~~
-
-- **Baseline reference** – requires a baseline commit to compare against.
-- **Static heuristics** – cannot account for runtime behaviour.
-
-Primary use cases
-~~~~~~~~~~~~~~~~~
-
-- Library maintainers verifying API stability before release.
-- CI/CD pipelines enforcing semantic versioning.
-- Release managers reviewing change impact.
 
 .. toctree::
    :maxdepth: 1
