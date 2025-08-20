@@ -13,22 +13,41 @@ back to built-in defaults. Use ``--config`` to point to an alternative file.
 Configuration overview
 ----------------------
 
-:ref:`Project <config-project>`
-    Define the package roots and visibility rules.
-:ref:`Ignore <config-ignore>`
-    Exclude paths from analysis.
-:ref:`Rules <config-rules>`
-    Override default bump levels for API changes.
-:ref:`Analysers <config-analysers>`
-    Enable and configure API analysers.
-:ref:`Migrations <config-migrations>`
-    Locate Alembic migration directories.
-:ref:`OpenAPI <config-openapi>`
-    Configure OpenAPI specification paths.
-:ref:`Version <config-version>`
-    Control version file detection and scheme.
-:ref:`Changelog <config-changelog>`
-    Configure changelog generation.
+A ``bumpwright.toml`` file is divided into thematic sections that mirror the
+tool's major features. Each section groups related options controlling project
+scope, analysis behaviour, or release outputs. The table below provides a quick
+map before diving into the detailed references.
+
+.. list-table:: Configuration sections
+   :header-rows: 1
+
+   * - Section
+     - Purpose
+     - Category
+   * - :ref:`Project <config-project>`
+     - Define the package roots and visibility rules.
+     - Project
+   * - :ref:`Ignore <config-ignore>`
+     - Exclude paths from analysis.
+     - Project
+   * - :ref:`Rules <config-rules>`
+     - Override default bump levels for API changes.
+     - Project
+   * - :ref:`Analysers <config-analysers>`
+     - Enable and configure API analysers.
+     - Analysis
+   * - :ref:`Migrations <config-migrations>`
+     - Locate Alembic migration directories.
+     - Analysis
+   * - :ref:`OpenAPI <config-openapi>`
+     - Configure OpenAPI specification paths.
+     - Analysis
+   * - :ref:`Version <config-version>`
+     - Control version file detection and scheme.
+     - Output
+   * - :ref:`Changelog <config-changelog>`
+     - Configure changelog generation.
+     - Output
 
 .. _config-quick-setup:
 
