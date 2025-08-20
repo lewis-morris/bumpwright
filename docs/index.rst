@@ -45,11 +45,11 @@ New to Bumpwright? Start with the :doc:`quickstart`.
 
    concepts/configuration
 
-.. toctree::
-   :caption: Analyzers Guide
-   :maxdepth: 1
+  .. toctree::
+     :caption: Analysers Guide
+     :maxdepth: 1
 
-   analysers/index
+     analysers/index
 
 .. toctree::
    :caption: Versioning Concepts
