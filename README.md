@@ -124,6 +124,7 @@ Enable what you need in `[analysers]` or per-run with `--enable-analyser/--disab
 
 - **Python API (default)** – respects `__all__`; otherwise public = names not starting with `_`.  
 - **CLI** – detects changes to argparse/Click commands.  
+- **gRPC** – service and method diffs.
 - **Web routes** – Flask/FastAPI route changes.  
 - **Migrations** – Alembic schema impacts.  
 - **OpenAPI** – spec diffs.  
