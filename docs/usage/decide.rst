@@ -12,6 +12,9 @@ Primary options
 * ``--emit-changelog`` – print the expected changelog for the suggested version.
 * ``--explain`` – show reasoning behind the suggested bump.
 * ``--no-impl-change-patch`` – ignore implementation-only changes to public symbols.
+* ``--repo-url URL`` – base repository URL used for commit links in changelog output.
+* ``--changelog-template PATH`` – Jinja2 template file for changelog entries.
+* ``--changelog-exclude REGEX`` – regex pattern for commit subjects to omit from changelog entries.
 
 Arguments
 ---------
@@ -33,6 +36,15 @@ Arguments
 
 ``--no-impl-change-patch``
     Do not treat implementation-only changes as patch-level impacts.
+
+``--repo-url URL``
+    Base repository URL used to build commit links in changelog output. Overrides ``[changelog].repo_url`` when provided. Defaults to none, showing raw commit hashes when unset.
+
+``--changelog-template PATH``
+    Jinja2 template file used when rendering changelog entries. Defaults to the built-in template or ``[changelog].template`` when configured. Useful for customising changelog layout.
+
+``--changelog-exclude REGEX``
+    Regex pattern for commit subjects to exclude from changelog entries. Repeatable. Patterns from configuration are combined with CLI values.
 
 ``--enable-analyser NAME``
     Enable analyser ``NAME`` in addition to configuration. Repeatable. Defaults to none.
