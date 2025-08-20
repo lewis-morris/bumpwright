@@ -7,15 +7,15 @@ Copy and paste the steps below to bump your first version.
 
 .. _installation:
 
-Install
--------
+Installation
+------------
 
 .. code-block:: console
 
    pip install bumpwright
 
-Initialise
-----------
+Initializing the Baseline
+-------------------------
 
 .. code-block:: console
 
@@ -36,20 +36,14 @@ Initialise
    git commit -m "feat: add greet helper"
    bumpwright init
 
-Make a change
--------------
+Making a Change and Deciding the Version
+----------------------------------------
 
 .. code-block:: console
 
    echo "def farewell() -> str:\n    return 'bye'" > demo/extra.py
    git add demo/extra.py
    git commit -m "feat: add farewell"
-
-Decide
-------
-
-.. code-block:: console
-
    bumpwright decide
 
 Expected output:
@@ -59,8 +53,8 @@ Expected output:
    bumpwright suggests: minor
    - [MINOR] extra:farewell: Added public symbol
 
-Bump
-----
+Applying the Bump
+-----------------
 
 .. code-block:: console
 
