@@ -5,6 +5,13 @@ Quickstart
 
 Copy and paste the steps below to bump your first version.
 
+Prerequisites
+-------------
+
+- Python 3.11+
+- Git
+- A terminal with ``pip`` installed
+
 .. _installation:
 
 Installation
@@ -16,6 +23,8 @@ Installation
 
 Initializing the Baseline
 -------------------------
+
+Start a demo project and prepare bumpwright for version tracking.
 
 .. code-block:: console
 
@@ -39,6 +48,8 @@ Initializing the Baseline
 Making a Change and Deciding the Version
 ----------------------------------------
 
+Add a new feature and let bumpwright suggest the appropriate version increment.
+
 .. code-block:: console
 
    echo "def farewell() -> str:\n    return 'bye'" > demo/extra.py
@@ -55,6 +66,8 @@ Expected output:
 
 Applying the Bump
 -----------------
+
+Apply the suggested version bump and update project files.
 
 .. code-block:: console
 
