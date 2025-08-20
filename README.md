@@ -5,7 +5,9 @@
 ![Python Versions](https://lewis-morris.github.io/bumpwright/_static/badges/python.svg)
 ![License](https://lewis-morris.github.io/bumpwright/_static/badges/license.svg)
 
-Bumpwright is an automated semantic versioning tool that scans your code changes—not just commit messages—to suggest the right next version. In a single command, it compares your latest code against the last release and tells you whether to bump the version by a patch, minor, or major, making accurate releases effortless for maintainers of libraries and services with stable interfaces.
+Bumpwright is an automated semantic versioning tool. It analyzes code changes instead of relying on commit messages to suggest the right next version.
+
+It compares your latest code against the last release with a single command. The tool tells you whether to bump the version by a patch, minor, or major, making accurate releases effortless for maintainers of libraries and services with stable interfaces.
 
 **Docs:** https://lewis-morris.github.io/bumpwright/
 **Guides:** https://lewis-morris.github.io/bumpwright/guides/
