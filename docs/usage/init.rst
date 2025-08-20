@@ -6,8 +6,8 @@ Record an empty ``chore(release): initialise baseline`` commit so that future ru
 Primary options
 ---------------
 
-* ``--summary [table|json]`` – Show project summary after initialisation.
-  Defaults to ``table`` when no format is specified.
+* ``--summary [table|json]`` – Show project summary after initialisation in the chosen format.
+  Must be followed by ``table`` or ``json``.
 
 Examples
 --------
@@ -19,7 +19,7 @@ Examples
 
       .. code-block:: console
 
-         bumpwright init --summary
+         bumpwright init --summary table
 
    .. tab-item:: Markdown
       :sync: markdown
