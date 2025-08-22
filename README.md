@@ -5,30 +5,37 @@
 ![Python Versions](https://lewis-morris.github.io/bumpwright/_static/badges/python.svg)
 ![License](https://lewis-morris.github.io/bumpwright/_static/badges/license.svg)
 
-Bumpwright is a static analysis tool that compares two Git references and
-recommends the appropriate semantic version bump. Unlike tools such as
-`bump2version` or `python-semantic-release` that rely on commit messages,
-Bumpwright inspects the **public API** itself, making it ideal for libraries and
-services with stable interfaces. It can also update version strings in your
-project and render changelog entries from your commits.
+Bumpwright is an automated semantic versioning tool. It analyzes code changes instead of relying on commit messages to suggest the right next version.
 
-**Docs:** https://lewis-morris.github.io/bumpwright
+It compares your latest code against the last release with a single command. The tool tells you whether to bump the version by a patch, minor, or major, making accurate releases effortless for maintainers of libraries and services with stable interfaces.
+
+**Docs:** https://lewis-morris.github.io/bumpwright/
 **Guides:** https://lewis-morris.github.io/bumpwright/guides/
 
----
+## Overview
 
-## Benefits
+### What & Why
+
+Traditional release tools rely on commit messages, which can be inconsistent. Bumpwright inspects your project’s public API directly to decide the next version. This catches breaking changes even if commit messages miss them and can update version strings and generate changelog entries automatically, streamlining releases.
+
+### How It Works
+
+Bumpwright compares two Git references—usually the last release tag and the current commit—and detects changes in the public interface. Removed functions or changed signatures trigger a major bump; new features result in a minor bump; and bug fixes or small tweaks lead to a patch bump. Static analysis and optional analysers (for CLI commands, web routes, migrations, and more) drive these decisions. You can apply the suggestion, update files, and render changelog notes.
+
+### Key Benefits
 
 - **Simplicity** – run a single command to see how your API changed.
-- **Flexibility** – enable analysers and override defaults to fit your workflow.
-- **Accuracy** – catch breaking changes that commit messages may miss.
+- **Accuracy** – catches breaking changes that commit messages may miss.
+- **Flexibility** – configurable analysers and settings to fit your workflow.
+- **Automation** – update version files and generate changelog entries.
 
-Get started with the [Get Started guide](https://lewis-morris.github.io/bumpwright/get-started.html) or dive into the [Quickstart](https://lewis-morris.github.io/bumpwright/get-started.html#quickstart).
+### Trade-offs / Constraints
 
-### Trade-offs
+- **Baseline required** – needs a baseline reference (e.g., prior release tag); run `bumpwright init` to mark it.
+- **Static analysis limits** – cannot account for runtime-specific changes or internal logic.
+- **Python 3.11+** – focuses on Python projects and requires Python 3.11 or newer.
 
-- **Baseline reference** – requires a baseline commit to compare against.
-- **Static heuristics** – cannot account for runtime behaviour.
+Get started with the [Quickstart guide](https://lewis-morris.github.io/bumpwright/quickstart.html).
 
 ---
 
@@ -41,7 +48,7 @@ pip install bumpwright  # Python 3.11+
 Bumpwright now uses Python's built-in `tomllib`, removing the need for the
 external `tomli` dependency.
 
-Full details: [Installation](https://lewis-morris.github.io/bumpwright/get-started.html#installation)
+Full details: [Installation](https://lewis-morris.github.io/bumpwright/quickstart.html#installation)
 
 ---
 
@@ -58,7 +65,7 @@ bumpwright decide
 bumpwright bump --commit --tag
 ```
 
-What the decision means and examples: [Quickstart](https://lewis-morris.github.io/bumpwright/get-started.html#quickstart) • Command flags: [Usage → bump](https://lewis-morris.github.io/bumpwright/usage/bump.html)
+What the decision means and examples: [Quickstart](https://lewis-morris.github.io/bumpwright/quickstart.html) • Command flags: [Usage → bump](https://lewis-morris.github.io/bumpwright/usage/bump.html)
 
 | Command | Purpose |
 |---------|---------|
@@ -119,6 +126,7 @@ Enable what you need in `[analysers]` or per-run with `--enable-analyser/--disab
 
 - **Python API (default)** – respects `__all__`; otherwise public = names not starting with `_`.  
 - **CLI** – detects changes to argparse/Click commands.  
+- **gRPC** – service and method diffs.
 - **Web routes** – Flask/FastAPI route changes.  
 - **Migrations** – Alembic schema impacts.  
 - **OpenAPI** – spec diffs.  

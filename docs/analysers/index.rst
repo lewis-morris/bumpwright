@@ -1,7 +1,7 @@
-Analysers
-=========
+Analysers Guide
+===============
 
-Analysers examine different facets of your project to detect API changes.
+Analysers inspect different facets of your project to detect API changes.
 Bumpwright ships optional analysers for the :doc:`CLI <cli>`, :doc:`gRPC <grpc>` services,
 :doc:`web routes <web_routes>`, :doc:`database migrations <migrations>`, :doc:`OpenAPI documents <openapi>`
 and :doc:`GraphQL schemas <graphql>`. The table below lists each analyser, the key used

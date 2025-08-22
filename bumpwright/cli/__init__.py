@@ -180,6 +180,7 @@ def _build_bump_subparser(
     )
     parser.add_argument(
         "--format",
+        dest="output_fmt",
         choices=["text", "md", "json"],
         default=os.getenv("BUMPWRIGHT_FORMAT", "text"),
         help="Output style: plain text, Markdown, or machine-readable JSON.",
@@ -291,11 +292,14 @@ def _build_history_subparser(
 
     parser = subparsers.add_parser(
         "history",
-        help="List existing git tags",
-        description="List git tags with their version numbers.",
+        help="List and roll back releases",
+        description=(
+            "List releases with their version numbers or roll back a tagged release."
+        ),
     )
     parser.add_argument(
         "--format",
+        dest="output_fmt",
         choices=["text", "md", "json"],
         default=os.getenv("BUMPWRIGHT_FORMAT", "text"),
         help="Output style: plain text, Markdown, or machine-readable JSON.",

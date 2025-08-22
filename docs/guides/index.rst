@@ -1,7 +1,7 @@
-Guides
-======
+Recipes & How-To Guides
+=======================
 
-Practical how-tos demonstrating bumpwright usage.
+Task-oriented snippets for common workflows.
 
 .. toctree::
    :caption: Recipes

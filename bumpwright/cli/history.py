@@ -283,7 +283,7 @@ def history_command(args: argparse.Namespace) -> int:  # noqa: PLR0915
         interacting with git.
 
     Example:
-        >>> history_command(argparse.Namespace(format="json", stats=False, rollback=None))  # doctest: +SKIP
+        >>> history_command(argparse.Namespace(output_fmt="json", stats=False, rollback=None))  # doctest: +SKIP
         0
     """
 
@@ -319,9 +319,9 @@ def history_command(args: argparse.Namespace) -> int:  # noqa: PLR0915
             record["stats"] = {"insertions": ins, "deletions": dels}
         records.append(record)
 
-    if args.format == "json":
+    if args.output_fmt == "json":
         logger.info(json.dumps(records, indent=2))
-    elif args.format == "md":
+    elif args.output_fmt == "md":
         header = ["Tag", "Version", "Date"]
         if args.stats:
             header.append("Stats")

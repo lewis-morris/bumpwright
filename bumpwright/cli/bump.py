@@ -217,7 +217,7 @@ def _display_result(
 ) -> None:
     """Show bump outcome using the selected format."""
 
-    if args.format == "json":
+    if args.output_fmt == "json":
         logger.info(
             json.dumps(
                 {
@@ -232,7 +232,7 @@ def _display_result(
                 indent=2,
             )
         )
-    elif args.format == "md":
+    elif args.output_fmt == "md":
         logger.info(
             "**bumpwright** bumped version: `%s` -> `%s` (%s)",
             vc.old,

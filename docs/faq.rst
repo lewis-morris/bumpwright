@@ -1,4 +1,4 @@
-Troubleshooting & FAQ
+FAQ & Troubleshooting
 =====================
 
 Common issues

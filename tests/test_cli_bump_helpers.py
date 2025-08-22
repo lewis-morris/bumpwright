@@ -135,7 +135,7 @@ def test_resolve_pyproject_missing() -> None:
 
 
 def test_display_result_json(caplog) -> None:
-    args = argparse.Namespace(format="json")
+    args = argparse.Namespace(output_fmt="json")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("pyproject.toml")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
@@ -146,7 +146,7 @@ def test_display_result_json(caplog) -> None:
 
 
 def test_display_result_text_skipped(caplog) -> None:
-    args = argparse.Namespace(format="text")
+    args = argparse.Namespace(output_fmt="text")
     vc = VersionChange(
         "0.1.0",
         "0.2.0",
@@ -261,6 +261,32 @@ def test_build_changelog_handles_tag_error(monkeypatch) -> None:
         raise subprocess.CalledProcessError(1, ["git", "tag"])
 
     monkeypatch.setattr("bumpwright.cli.changelog.tag_for_commit", blow_up)
+    result = _build_changelog(args, "0.2.0")
+    assert result == "Version=0.2.0\n"
+
+
+def test_build_changelog_handles_contributor_error(monkeypatch) -> None:
+    """_build_changelog proceeds when contributor collection fails."""
+
+    args = argparse.Namespace(
+        changelog="CHANGELOG.md",
+        head="HEAD",
+        repo_url=None,
+        changelog_template=None,
+        changelog_exclude=[],
+    )
+    monkeypatch.setattr(
+        "bumpwright.cli.changelog.collect_commits", lambda base, head: []
+    )
+    monkeypatch.setattr("bumpwright.cli.changelog.last_release_commit", lambda: None)
+    monkeypatch.setattr(
+        "bumpwright.cli.changelog._read_template", lambda path: "Version={{ version }}"
+    )
+
+    def blow_up(base: str, head: str) -> list[tuple[str, str]]:
+        raise subprocess.CalledProcessError(1, ["git", "shortlog"])
+
+    monkeypatch.setattr("bumpwright.cli.changelog.collect_contributors", blow_up)
     result = _build_changelog(args, "0.2.0")
     assert result == "Version=0.2.0\n"
 
@@ -486,7 +512,7 @@ def test_resolve_pyproject_uses_find(
 def test_display_result_md(caplog: pytest.LogCaptureFixture) -> None:
     """Markdown format lists updated and skipped files."""
 
-    args = argparse.Namespace(format="md")
+    args = argparse.Namespace(output_fmt="md")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("a")], [Path("b")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):

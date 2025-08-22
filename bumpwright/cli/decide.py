@@ -55,6 +55,7 @@ def add_decide_arguments(parser: argparse.ArgumentParser) -> None:
     add_ref_options(parser)
     parser.add_argument(
         "--format",
+        dest="output_fmt",
         choices=["text", "md", "json"],
         default=os.getenv("BUMPWRIGHT_FORMAT", "text"),
         help="Output style: plain text, Markdown, or machine-readable JSON.",
@@ -336,9 +337,9 @@ def _decide_only(args: argparse.Namespace, cfg: Config) -> int:
     }
     if changelog is not None:
         payload["changelog"] = changelog
-    if args.format == "json":
+    if args.output_fmt == "json":
         logger.info(json.dumps(payload, indent=2))
-    elif args.format == "md":
+    elif args.output_fmt == "md":
         logger.info("**bumpwright** suggests: `%s`", decision.level)
         logger.info("%s", _format_impacts_text(impacts))
         if changelog:

@@ -1,152 +1,83 @@
-bumpwright documentation
-========================
+Bumpwright
+==========
 
-.. |coverage| image:: _static/badges/coverage.svg
-   :alt: test coverage
-.. |version| image:: _static/badges/version.svg
-   :alt: latest version
-.. |python| image:: _static/badges/python.svg
-   :alt: supported Python versions
-.. |license| image:: _static/badges/license.svg
-   :alt: license
+Bumpwright checks your project's public API to suggest the correct semantic version bump. It compares your code to a baseline and reports whether the next release should be a patch, minor, or major update.
 
-|coverage| |version| |python| |license|
+Why
+---
+- Avoid missed breaking changes when commit messages fall short.
+- Automate version numbers and changelog generation.
 
-Introduction
-------------
+How
+---
+- Compare the current commit to a recorded baseline.
+- Optional analysers inspect CLIs, web routes, migrations, and more.
 
-Bumpwright is a static analysis tool that compares two Git references and
-recommends the appropriate semantic version bump. Unlike tools such as
-``bump2version`` or ``python-semantic-release`` that rely on manual hints or
-commit messages, Bumpwright inspects the public API itself, making it ideal for
-libraries and services that expose stable interfaces.
+Pros
+----
+- Accurate bump suggestions based on the public API.
+- Flexible configuration and pluggable analysers.
+- Generates release notes for you.
 
-To get started immediately, try the following commands:
+Cons
+----
+- Requires a Git baseline commit.
+- Static analysis can't cover runtime behaviour.
+- Python 3.11+ only.
 
-.. code-block:: bash
-
-   bumpwright init
-   bumpwright decide
-
-New to Bumpwright? Start with the :doc:`get-started`.
-
-.. grid:: 1 2 2 2
-   :gutter: 2
-
-   .. card:: New to Bumpwright?
-      :link: get-started
-      :link-type: doc
-
-   .. card:: Need configuration details?
-      :link: concepts/configuration
-      :link-type: doc
-
-   .. card:: Looking for recipes?
-      :link: guides/index
-      :link-type: doc
-
-   .. card:: CLI reference
-      :link: cli_reference
-      :link-type: doc
-
-Who is this for?
------------------
-
-If you're new to release automation, begin with the :doc:`Get Started guide <get-started>`.
-Experienced users can dive into the :doc:`Guides <guides/index>` or consult the
-:doc:`CLI reference <cli_reference>` directly.
-
-Release workflow at a glance
-----------------------------
-
-.. list-table::
-   :header-rows: 1
-
-   * - Task
-     - Purpose
-   * - :doc:`init <usage/init>`
-     - Record the current state as a baseline.
-   * - :doc:`decide <usage/decide>`
-     - Analyse changes and suggest the bump level.
-   * - :doc:`bump <usage/bump>`
-     - Apply the version change and update files.
-   * - :doc:`history <usage/history>`
-     - Review previous bump decisions.
-
-Benefits
-~~~~~~~~
-
-- **Simplicity** – run a single command to see how your API changed.
-- **Flexibility** – enable analysers and override defaults to fit your workflow.
-- **Accuracy** – catch breaking changes that commit messages may miss.
-
-Trade-offs
-~~~~~~~~~~
-
-- **Baseline reference** – requires a baseline commit to compare against.
-- **Static heuristics** – cannot account for runtime behaviour.
-
-Primary use cases
-~~~~~~~~~~~~~~~~~
-
-- Library maintainers verifying API stability before release.
-- CI/CD pipelines enforcing semantic versioning.
-- Release managers reviewing change impact.
+New to Bumpwright? Start with the :doc:`quickstart`.
 
 .. toctree::
+   :caption: Quickstart
    :maxdepth: 1
-   :caption: Get Started
 
-   get-started
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Versioning
-
-   concepts/versioning
+   quickstart
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Configuration
-
-   concepts/configuration
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Guides
-
-   guides/index
-   troubleshooting
-
-.. toctree::
-   :maxdepth: 1
-   :caption: CI/CD
-
-   ci/github-actions
-
-.. toctree::
-   :maxdepth: 1
    :caption: CLI Reference
+   :maxdepth: 1
 
    cli_reference
 
 .. toctree::
+   :caption: Configuration Reference
    :maxdepth: 1
-   :caption: Changelog
+
+   concepts/configuration
+
+  .. toctree::
+     :caption: Analysers Guide
+     :maxdepth: 1
+
+     analysers/index
+
+.. toctree::
+   :caption: Versioning Concepts
+   :maxdepth: 1
+
+   concepts/versioning
+
+.. toctree::
+   :caption: Changelog & Templates
+   :maxdepth: 1
 
    changelog/index
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Analysers
+   :caption: Recipes / How-To Guides
+   :maxdepth: 2
 
-   analysers/index
+   guides/index
 
 .. toctree::
+   :caption: FAQ / Troubleshooting
    :maxdepth: 1
-   :caption: Project
 
-   glossary
+   faq
+
+.. toctree::
+   :caption: Contributing & Roadmap
+   :maxdepth: 1
+
    contributing
    roadmap
-
