@@ -357,3 +357,106 @@
 - b2724f7 Merge pull request #65 from lewis-morris/arched/update-version-handling-in-setup.py-and-init
 - 7640107 refactor(cli,versioning): resolve pylint warnings
 - c7432af feat(versioning): expand default version file updates
+## [v0.1.1] - 2025-08-22
+- [e85cdc5](https://github.com/lewis-morris/bumpwright/commit/e85cdc5) Merge remote-tracking branch 'origin/master'
+- [
+d5011a2](https://github.com/lewis-morris/bumpwright/commit/
+d5011a2) Merge pull request #16 from lewis-morris/arched/add-introduction-and-organize-configuration-docs
+- [
+ea65630](https://github.com/lewis-morris/bumpwright/commit/
+ea65630) docs(configuration): summarize configuration sections
+- [
+9c736ec](https://github.com/lewis-morris/bumpwright/commit/
+9c736ec) Merge pull request #15 from lewis-morris/arched/standardize-spelling-of-analyser/analyzer
+- [
+8c8380c](https://github.com/lewis-morris/bumpwright/commit/
+8c8380c) docs(docs): standardise analyser spelling
+- [
+6eced7c](https://github.com/lewis-morris/bumpwright/commit/
+6eced7c) Merge pull request #14 from lewis-morris/arched/edit-quickstart-documentation-for-clarity
+- [
+d95c1ae](https://github.com/lewis-morris/bumpwright/commit/
+d95c1ae) Merge pull request #13 from lewis-morris/arched/update-readme.md-for-clarity
+- [
+13a99b5](https://github.com/lewis-morris/bumpwright/commit/
+13a99b5) docs(quickstart): add prerequisites and guidance
+- [
+3fad466](https://github.com/lewis-morris/bumpwright/commit/
+3fad466) docs(readme): clarify introduction
+- [
+2dc2d05](https://github.com/lewis-morris/bumpwright/commit/
+2dc2d05) Merge pull request #12 from lewis-morris/arched/add-grpc-analyser-entry-to-readme
+- [
+97ede03](https://github.com/lewis-morris/bumpwright/commit/
+97ede03) Merge pull request #11 from lewis-morris/arched/decide-documentation-domain-and-update-references
+- [
+7e45583](https://github.com/lewis-morris/bumpwright/commit/
+7e45583) Merge pull request #10 from lewis-morris/arched/update-init.rst-documentation
+- [
+589e682](https://github.com/lewis-morris/bumpwright/commit/
+589e682) docs(readme): add gRPC analyser entry
+- [
+db82a52](https://github.com/lewis-morris/bumpwright/commit/
+db82a52) docs(urls): set canonical documentation domain
+- [
+8c74066](https://github.com/lewis-morris/bumpwright/commit/
+8c74066) docs(init): require explicit summary format
+- [
+e27f2a6](https://github.com/lewis-morris/bumpwright/commit/
+e27f2a6) Merge pull request #9 from lewis-morris/arched/update-documentation-for-primary-options
+- [
+401ac0b](https://github.com/lewis-morris/bumpwright/commit/
+401ac0b) docs(decide): document changelog options
+- [
+2e99fa9](https://github.com/lewis-morris/bumpwright/commit/
+2e99fa9) Merge pull request #8 from lewis-morris/arched/add-sample-output-for-explain-feature
+- [
+ae081ea](https://github.com/lewis-morris/bumpwright/commit/
+ae081ea) docs(decide): showcase explain decision anatomy
+- [
+1b78a99](https://github.com/lewis-morris/bumpwright/commit/
+1b78a99) Merge pull request #7 from lewis-morris/arched/use-clear-heading-hierarchy-in-documentation
+- [
+da5b546](https://github.com/lewis-morris/bumpwright/commit/
+da5b546) docs(quickstart): clarify heading hierarchy
+- [
+8877280](https://github.com/lewis-morris/bumpwright/commit/
+8877280) Merge pull request #6 from lewis-morris/arched/add-usage-example-to-cli-reference
+- [
+9de35a4](https://github.com/lewis-morris/bumpwright/commit/
+9de35a4) docs(bump): start CLI reference with example
+- [
+7e0db27](https://github.com/lewis-morris/bumpwright/commit/
+7e0db27) Merge pull request #5 from lewis-morris/arched/restructure-documentation-into-defined-format
+- [
+578bf28](https://github.com/lewis-morris/bumpwright/commit/
+578bf28) docs(restructure): reorganize documentation
+- [
+a9a73d6](https://github.com/lewis-morris/bumpwright/commit/
+a9a73d6) Merge pull request #4 from lewis-morris/arched/improve-bumpwright-documentation-quality
+- [
+5b1df61](https://github.com/lewis-morris/bumpwright/commit/
+5b1df61) docs(intro): refine project introduction and overview
+- [
+37225dc](https://github.com/lewis-morris/bumpwright/commit/
+37225dc) Merge pull request #3 from lewis-morris/arched/rename-format_-to-output_fmt
+- [
+8473f72](https://github.com/lewis-morris/bumpwright/commit/
+8473f72) fix(cli): rename format arg to output_fmt
+- [
+2e1b817](https://github.com/lewis-morris/bumpwright/commit/
+2e1b817) Merge pull request #2 from lewis-morris/arched/unify-navigation-labels-and-sidebar-structure
+- [
+e1933ba](https://github.com/lewis-morris/bumpwright/commit/
+e1933ba) docs(nav): unify navigation labels and toctree
+- [
+b265c2a](https://github.com/lewis-morris/bumpwright/commit/
+b265c2a) Merge pull request #1 from lewis-morris/arched/investigate-failing-unit-tests-in-ci
+- [
+af90700](https://github.com/lewis-morris/bumpwright/commit/
+af90700) fix(changelog): handle contributor errors gracefully
+
+
+### Contributors
+- [Lewis Morris](https://github.com/lewis-morris)
+- Lewis Morris
