@@ -8,6 +8,9 @@ back to built-in defaults. Use ``--config`` to point to an alternative file.
    Environment variables prefixed with ``BUMPWRIGHT_`` provide default values
    for CLI flags. See :ref:`config-envvars` for the full list.
 
+For a side-by-side comparison of CLI flags, configuration keys, and environment
+variables, see :doc:`../configuration_summary`.
+
 .. _config-overview:
 
 Configuration overview
