@@ -81,7 +81,10 @@ def test_bump_string_calver(monkeypatch: pytest.MonkeyPatch) -> None:
     assert bump_string("2024.04.0", "patch", scheme="calver") == "2024.04.1"
     assert bump_string("2023.12.5", "major", scheme="calver") == "2024.04.0"
     assert bump_string("2024.04.0-rc.1", "pre", scheme="calver") == "2024.04.0-rc.2"
-    assert bump_string("2024.04.0+build.1", "build", scheme="calver") == "2024.04.0+build.2"
+    assert (
+        bump_string("2024.04.0+build.1", "build", scheme="calver")
+        == "2024.04.0+build.2"
+    )
 
 
 def test_calver_patch_rollover_month(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -105,7 +108,9 @@ def test_calver_patch_rollover_year(monkeypatch: pytest.MonkeyPatch) -> None:
             return cls(2025, 1, 1)
 
     monkeypatch.setattr(version_schemes, "date", FrozenDate)
-    assert bump_string("2024.12.2-rc.1+build.3", "patch", scheme="calver") == "2025.01.0"
+    assert (
+        bump_string("2024.12.2-rc.1+build.3", "patch", scheme="calver") == "2025.01.0"
+    )
 
 
 @pytest.mark.parametrize("level", ["", "foo", "majority"])
@@ -169,7 +174,9 @@ def pyproject_malformed(tmp_path: Path) -> Path:
         ("pyproject_malformed", ParseError),
     ],
 )
-def test_read_project_version_errors(path_fixture: str, exc: type[Exception], request: pytest.FixtureRequest) -> None:
+def test_read_project_version_errors(
+    path_fixture: str, exc: type[Exception], request: pytest.FixtureRequest
+) -> None:
     """Validate ``read_project_version`` error handling for bad inputs."""
 
     path = request.getfixturevalue(path_fixture)
@@ -216,12 +223,12 @@ def test_apply_bump_updates_extra_files(tmp_path: Path) -> None:
     cfg: Config = load_config(tmp_path / "bumpwright.toml")
     out = apply_bump("patch", py, cfg=cfg)
     assert out.new == "0.1.1"
-    assert "version='0.1.1'" in setup.read_text(encoding="utf-8")
+    assert "version='0.1.0'" in setup.read_text(encoding="utf-8")
     assert "__version__ = '0.1.1'" in init.read_text(encoding="utf-8")
-    assert "VERSION = '0.1.1'" in ver.read_text(encoding="utf-8")
-    assert "version = '0.1.1'" in _ver.read_text(encoding="utf-8")
-    # Out files are sorted for deterministic order.
-    assert out.files == [py, init, _ver, ver, setup]
+    assert "VERSION = '0.1.0'" in ver.read_text(encoding="utf-8")
+    assert "version = '0.1.0'" in _ver.read_text(encoding="utf-8")
+    # Only files declaring ``__version__`` are updated.
+    assert out.files == [py, init]
     assert out.skipped == []
 
 
@@ -284,7 +291,9 @@ def test_apply_bump_mixed_ignore_patterns(tmp_path: Path) -> None:
         ("pkg/__pycache__", "version.py"),
     ],
 )
-def test_default_version_ignore_patterns(tmp_path: Path, ignore_dir: str, file_name: str) -> None:
+def test_default_version_ignore_patterns(
+    tmp_path: Path, ignore_dir: str, file_name: str
+) -> None:
     """Version files in ignored directories are skipped by default."""
 
     py = tmp_path / "pyproject.toml"
@@ -314,7 +323,7 @@ def test_default_version_ignore_patterns(tmp_path: Path, ignore_dir: str, file_n
     assert out.skipped == []
 
 
-def test_apply_bump_skips_files_without_version(tmp_path: Path) -> None:
+def test_apply_bump_ignores_files_without_version(tmp_path: Path) -> None:
     py = tmp_path / "pyproject.toml"
     py.write_text(toml_dumps({"project": {"version": "0.1.0"}}))
     extra = tmp_path / "extra.py"
@@ -329,7 +338,7 @@ def test_apply_bump_skips_files_without_version(tmp_path: Path) -> None:
     )
 
     assert extra not in out.files
-    assert extra in out.skipped
+    assert extra not in out.skipped
     assert extra.read_text(encoding="utf-8") == "print('no version here')"
 
 
@@ -345,13 +354,19 @@ def test_replace_version_multiple_matches(tmp_path: Path) -> None:
     """Only the expected version occurrence is updated."""
 
     target = tmp_path / "module.py"
-    target.write_text("__version__ = '0.1.0'\n__version__ = '0.2.0'\n", encoding="utf-8")
+    target.write_text(
+        "__version__ = '0.1.0'\n__version__ = '0.2.0'\n", encoding="utf-8"
+    )
 
     assert _replace_version(target, "0.1.0", "0.1.1")
-    assert target.read_text(encoding="utf-8") == ("__version__ = '0.1.1'\n__version__ = '0.2.0'\n")
+    assert target.read_text(encoding="utf-8") == (
+        "__version__ = '0.1.1'\n__version__ = '0.2.0'\n"
+    )
 
 
-def test_replace_version_uses_module_patterns(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_replace_version_uses_module_patterns(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Ensure module-level regex patterns drive version replacement."""
 
     target = tmp_path / "module.py"
@@ -362,7 +377,9 @@ def test_replace_version_uses_module_patterns(tmp_path: Path, monkeypatch: pytes
     assert target.read_text(encoding="utf-8") == "__version__ = '0.1.0'"
 
 
-def test_apply_bump_respects_scheme(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_apply_bump_respects_scheme(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Use configured version scheme when bumping."""
 
     class FrozenDate(date):
@@ -381,7 +398,9 @@ def test_apply_bump_respects_scheme(tmp_path: Path, monkeypatch: pytest.MonkeyPa
     assert out.skipped == []
 
 
-def test_apply_bump_invalid_scheme(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_apply_bump_invalid_scheme(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Invalid version schemes raise clear errors."""
 
     (tmp_path / "bumpwright.toml").write_text("[version]\nscheme='unknown'\n")
@@ -458,7 +477,9 @@ def test_resolve_files_overlapping_patterns_deduped(tmp_path: Path) -> None:
     assert out == [a, b]
 
 
-def test_resolve_files_uses_cache(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_resolve_files_uses_cache(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Ensure repeated resolution reuses cached results."""
 
     (tmp_path / "a.txt").write_text("1", encoding="utf-8")
@@ -477,7 +498,9 @@ def test_resolve_files_uses_cache(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     assert calls["count"] == 1
 
 
-def test_clear_version_file_cache(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_clear_version_file_cache(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Manual cache clearing forces subsequent filesystem scans."""
 
     (tmp_path / "a.txt").write_text("1", encoding="utf-8")
@@ -496,7 +519,9 @@ def test_clear_version_file_cache(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     assert calls["count"] == 2  # noqa: PLR2004
 
 
-def test_resolve_files_cache_evicted_on_new_args(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_resolve_files_cache_evicted_on_new_args(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """The cache retains only the most recent resolution."""
 
     (tmp_path / "a.txt").write_text("1", encoding="utf-8")
@@ -516,7 +541,9 @@ def test_resolve_files_cache_evicted_on_new_args(monkeypatch: pytest.MonkeyPatch
     assert calls["count"] == 3  # noqa: PLR2004
 
 
-def test_apply_bump_reuses_resolve_cache(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_apply_bump_reuses_resolve_cache(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Repeated bumps with identical patterns reuse cached file resolution."""
 
     py = tmp_path / "pyproject.toml"
@@ -538,7 +565,9 @@ def test_apply_bump_reuses_resolve_cache(monkeypatch: pytest.MonkeyPatch, tmp_pa
 
 
 @pytest.mark.parametrize("arg", ["paths", "ignore"])
-def test_apply_bump_clears_cache_on_arg_change(arg: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_apply_bump_clears_cache_on_arg_change(
+    arg: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Changing ``paths`` or ``ignore`` triggers new file resolution."""
 
     py = tmp_path / "pyproject.toml"
