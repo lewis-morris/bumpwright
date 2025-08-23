@@ -15,4 +15,4 @@ from .cli import main
 
 __all__ = ["__version__", "main", "cli", "versioning"]
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
