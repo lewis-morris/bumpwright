@@ -121,12 +121,15 @@ def _resolve_refs(args: argparse.Namespace) -> tuple[str, str]:
     return base, args.head
 
 
-def _safe_changed_paths(base: str, head: str) -> set[str]:
+def _safe_changed_paths(
+    base: str, head: str, cwd: str | Path | None = None
+) -> set[str]:
     """Return changed paths or raise :class:`GitDiffError` on failure.
 
     Args:
         base: Base git reference for comparison.
         head: Head git reference for comparison.
+        cwd: Repository path in which to execute ``git``.
 
     Returns:
         Set of paths changed between ``base`` and ``head``.
@@ -137,7 +140,7 @@ def _safe_changed_paths(base: str, head: str) -> set[str]:
     """
 
     try:
-        return changed_paths(base, head)
+        return changed_paths(base, head, cwd=str(cwd) if cwd else None)
     except (
         subprocess.CalledProcessError
     ) as exc:  # pragma: no cover - exercised in tests
@@ -201,7 +204,7 @@ def _prepare_version_files(
     paths = list(cfg.version.paths)
     if args.version_path:
         paths.extend(args.version_path)
-    changed = _safe_changed_paths(base, head)
+    changed = _safe_changed_paths(base, head, cwd=pyproject.parent)
     filtered = {
         p
         for p in changed
