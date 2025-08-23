@@ -117,7 +117,9 @@ def test_prepare_version_files_glob_absolute(tmp_path: Path) -> None:
 def test_safe_changed_paths_errors(monkeypatch) -> None:
     """Ensure a descriptive error is raised for diff failures."""
 
-    def fail(base: str, head: str) -> set[str]:
+    def fail(
+        base: str, head: str, cwd: str | Path | None = None
+    ) -> set[str]:  # noqa: ARG001
         raise subprocess.CalledProcessError(1, ["git", "diff"])
 
     monkeypatch.setattr("bumpwright.cli.bump.changed_paths", fail)
