@@ -575,3 +575,35 @@ af90700) fix(changelog): handle contributor errors gracefully
 ### Contributors
 - [Lewis Morris](https://github.com/lewis-morris)
 - Lewis Morris
+## [v0.2.0] - 2025-08-23
+[Diff since v0.1.2](https://github.com/lewis-morris/bumpwright/compare/v0.1.2...v0.2.0)
+- [d028580](https://github.com/lewis-morris/bumpwright/commit/d028580) Merge remote-tracking branch 'origin/master'
+- [
+e6ecd81](https://github.com/lewis-morris/bumpwright/commit/
+e6ecd81) gitignore changes
+- [
+f790930](https://github.com/lewis-morris/bumpwright/commit/
+f790930) Merge pull request #18 from lewis-morris/arched/update-file-handling-in-versioning
+- [
+6fdee41](https://github.com/lewis-morris/bumpwright/commit/
+6fdee41) Merge branch 'master' into arched/update-file-handling-in-versioning
+- [
+514661b](https://github.com/lewis-morris/bumpwright/commit/
+514661b) Merge pull request #19 from lewis-morris/arched/modify-_display_result-to-omit-skipped-files
+- [
+cf237bd](https://github.com/lewis-morris/bumpwright/commit/
+cf237bd) Merge pull request #20 from lewis-morris/arched/extend-_safe_changed_paths-with-cwd-parameter
+- [
+02d0d6a](https://github.com/lewis-morris/bumpwright/commit/
+02d0d6a) test(cli): add subdirectory invocation regression
+- [
+73cf5fc](https://github.com/lewis-morris/bumpwright/commit/
+73cf5fc) feat(cli): add flag to toggle skipped files output
+- [
+299614b](https://github.com/lewis-morris/bumpwright/commit/
+299614b) fix(versioning): ignore files without __version__ markers
+
+
+### Contributors
+- [Lewis Morris](https://github.com/lewis-morris)
+- Lewis Morris
