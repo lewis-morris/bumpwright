@@ -117,7 +117,9 @@ def test_prepare_version_files_glob_absolute(tmp_path: Path) -> None:
 def test_safe_changed_paths_errors(monkeypatch) -> None:
     """Ensure a descriptive error is raised for diff failures."""
 
-    def fail(base: str, head: str) -> set[str]:
+    def fail(
+        base: str, head: str, cwd: str | Path | None = None
+    ) -> set[str]:  # noqa: ARG001
         raise subprocess.CalledProcessError(1, ["git", "diff"])
 
     monkeypatch.setattr("bumpwright.cli.bump.changed_paths", fail)
@@ -135,7 +137,7 @@ def test_resolve_pyproject_missing() -> None:
 
 
 def test_display_result_json(caplog) -> None:
-    args = argparse.Namespace(output_fmt="json")
+    args = argparse.Namespace(output_fmt="json", show_skipped=True)
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("pyproject.toml")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
@@ -148,6 +150,16 @@ def test_display_result_json(caplog) -> None:
 def test_display_result_text_no_skipped(caplog) -> None:
     args = argparse.Namespace(output_fmt="text")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("pyproject.toml")])
+
+def test_display_result_text_skipped(caplog) -> None:
+    args = argparse.Namespace(output_fmt="text", show_skipped=False)
+    vc = VersionChange(
+        "0.1.0",
+        "0.2.0",
+        "minor",
+        [Path("pyproject.toml")],
+        [Path("extra.py")],
+    )
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
         _display_result(args, vc, dec)
@@ -508,8 +520,19 @@ def test_display_result_md_no_skipped(caplog: pytest.LogCaptureFixture) -> None:
 
     args = argparse.Namespace(output_fmt="md")
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("a")])
-    dec = Decision("minor", 1.0, [])
+
+def test_display_result_md(caplog: pytest.LogCaptureFixture) -> None:
+    """Markdown format lists skipped files only when requested."""
+
+    args = argparse.Namespace(output_fmt="md", show_skipped=False)
+    vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("a")], [Path("b")])
+
+    assert "Updated files" in out and "Skipped files" not in out
+    assert "Skipped files" not in out
+
+    args.show_skipped = True
+    caplog.clear()
     with caplog.at_level(logging.INFO):
         _display_result(args, vc, dec)
     out = "\n".join(r.message for r in caplog.records)
-    assert "Updated files" in out and "Skipped files" not in out
+    assert "Updated files" in out and "Skipped files" in out

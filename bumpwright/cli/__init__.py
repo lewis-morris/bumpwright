@@ -186,6 +186,12 @@ def _build_bump_subparser(
         help="Output style: plain text, Markdown, or machine-readable JSON.",
     )
     parser.add_argument(
+        "--show-skipped",
+        action="store_true",
+        default=_env_flag("BUMPWRIGHT_SHOW_SKIPPED"),
+        help="Display files skipped during version updates.",
+    )
+    parser.add_argument(
         "--repo-url",
         default=os.getenv("BUMPWRIGHT_REPO_URL"),
         help=(
