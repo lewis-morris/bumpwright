@@ -219,22 +219,19 @@ def _display_result(
     args: argparse.Namespace, vc: VersionChange, decision: Decision
 ) -> None:
     """Show bump outcome using the selected format."""
-
+    show_skipped = getattr(args, "show_skipped", False)
     if args.output_fmt == "json":
-        logger.info(
-            json.dumps(
-                {
-                    "old_version": vc.old,
-                    "new_version": vc.new,
-                    "level": vc.level,
-                    "confidence": decision.confidence,
-                    "reasons": decision.reasons,
-                    "files": [str(p) for p in vc.files],
-                    "skipped": [str(p) for p in vc.skipped],
-                },
-                indent=2,
-            )
-        )
+        payload = {
+            "old_version": vc.old,
+            "new_version": vc.new,
+            "level": vc.level,
+            "confidence": decision.confidence,
+            "reasons": decision.reasons,
+            "files": [str(p) for p in vc.files],
+        }
+        if show_skipped:
+            payload["skipped"] = [str(p) for p in vc.skipped]
+        logger.info(json.dumps(payload, indent=2))
     elif args.output_fmt == "md":
         logger.info(
             "**bumpwright** bumped version: `%s` -> `%s` (%s)",
@@ -246,7 +243,7 @@ def _display_result(
             "Updated files:\n%s",
             format_bullet_list((str(p) for p in vc.files), True),
         )
-        if vc.skipped:
+        if show_skipped and vc.skipped:
             logger.info(
                 "Skipped files:\n%s",
                 format_bullet_list((str(p) for p in vc.skipped), True),
@@ -262,7 +259,7 @@ def _display_result(
             "Updated files:\n%s",
             format_bullet_list((str(p) for p in vc.files), False),
         )
-        if vc.skipped:
+        if show_skipped and vc.skipped:
             logger.info(
                 "Skipped files:\n%s",
                 format_bullet_list((str(p) for p in vc.skipped), False),

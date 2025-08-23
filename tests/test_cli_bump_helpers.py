@@ -137,7 +137,7 @@ def test_resolve_pyproject_missing() -> None:
 
 
 def test_display_result_json(caplog) -> None:
-    args = argparse.Namespace(output_fmt="json")
+    args = argparse.Namespace(output_fmt="json", show_skipped=True)
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("pyproject.toml")])
     dec = Decision("minor", 1.0, [])
     with caplog.at_level(logging.INFO):
@@ -148,7 +148,7 @@ def test_display_result_json(caplog) -> None:
 
 
 def test_display_result_text_skipped(caplog) -> None:
-    args = argparse.Namespace(output_fmt="text")
+    args = argparse.Namespace(output_fmt="text", show_skipped=False)
     vc = VersionChange(
         "0.1.0",
         "0.2.0",
@@ -157,6 +157,13 @@ def test_display_result_text_skipped(caplog) -> None:
         [Path("extra.py")],
     )
     dec = Decision("minor", 1.0, [])
+    with caplog.at_level(logging.INFO):
+        _display_result(args, vc, dec)
+    out = "\n".join(record.message for record in caplog.records)
+    assert "Skipped files:" not in out
+
+    args.show_skipped = True
+    caplog.clear()
     with caplog.at_level(logging.INFO):
         _display_result(args, vc, dec)
     out = "\n".join(record.message for record in caplog.records)
@@ -512,11 +519,18 @@ def test_resolve_pyproject_uses_find(
 
 
 def test_display_result_md(caplog: pytest.LogCaptureFixture) -> None:
-    """Markdown format lists updated and skipped files."""
+    """Markdown format lists skipped files only when requested."""
 
-    args = argparse.Namespace(output_fmt="md")
+    args = argparse.Namespace(output_fmt="md", show_skipped=False)
     vc = VersionChange("0.1.0", "0.2.0", "minor", [Path("a")], [Path("b")])
     dec = Decision("minor", 1.0, [])
+    with caplog.at_level(logging.INFO):
+        _display_result(args, vc, dec)
+    out = "\n".join(r.message for r in caplog.records)
+    assert "Skipped files" not in out
+
+    args.show_skipped = True
+    caplog.clear()
     with caplog.at_level(logging.INFO):
         _display_result(args, vc, dec)
     out = "\n".join(r.message for r in caplog.records)
