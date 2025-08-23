@@ -275,8 +275,9 @@ def _update_additional_files(
 ) -> tuple[list[Path], list[Path]]:
     """Update version strings in files matching ``patterns``.
 
-    Each candidate file is examined and, if it contains the old version string,
-    rewritten in place with the new one.
+    Each candidate file is read and, when it declares ``__version__``, the old
+    value is replaced with ``new``. Files lacking a ``__version__`` assignment
+    are ignored and do not appear in the ``skipped`` list.
 
     Args:
         new: New version string.
@@ -299,6 +300,13 @@ def _update_additional_files(
     skipped: list[Path] = []
     for f in files:
         if f.resolve() == canon:
+            continue
+        try:
+            text = f.read_text(encoding="utf-8")
+        except OSError:
+            skipped.append(f)
+            continue
+        if "__version__" not in text:
             continue
         if _replace_version(f, old, new):
             changed.append(f)
