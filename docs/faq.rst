@@ -66,6 +66,19 @@ FAQ
    configuration to see which analysers are enabled. The :doc:`cli_reference`
    describes all available command-line options.
 
+.. dropdown:: Why aren’t skipped files shown in output?
+
+   Skipped files are hidden by default. Pass ``--show-skipped`` (or set
+   ``BUMPWRIGHT_SHOW_SKIPPED=1``) to include them in text/Markdown output and
+   to add the ``skipped`` field to JSON.
+
+.. dropdown:: A change didn’t trigger a bump
+
+   Ensure the change is not only in version files (e.g., ``pyproject.toml`` or
+   ``__init__.py`` with a ``__version__`` value), which are ignored when
+   deciding whether a bump is needed. Run with ``-v`` to see debug logs of
+   changed paths and which were considered relevant.
+
 .. dropdown:: Can I simulate a bump without writing to disk?
 
    Yes. Run with ``--dry-run`` to preview changes without modifying files.
@@ -78,4 +91,3 @@ FAQ
    Bumpwright compares two Git references. Fetch all remote branches and tags
    so the specified ``--base`` and ``--head`` exist. See :ref:`installation`
    for repository setup tips.
-

@@ -34,9 +34,15 @@ This table maps configuration options between the command line, ``bumpwright.tom
    * - ``--repo-url``
      - ``[changelog].repo_url``
      - ``BUMPWRIGHT_REPO_URL``
+   * - ``--show-skipped``
+     - (n/a)
+     - ``BUMPWRIGHT_SHOW_SKIPPED``
    * - ``--explain``
      - (n/a)
      - ``BUMPWRIGHT_EXPLAIN``
+   * - ``--emit-changelog``
+     - (n/a)
+     - ``BUMPWRIGHT_EMIT_CHANGELOG``
    * - ``--enable-analyser NAME``
      - ``[analysers].<name> = true``
      - ``BUMPWRIGHT_ENABLE_ANALYSER``
@@ -52,6 +58,9 @@ This table maps configuration options between the command line, ``bumpwright.tom
    * - ``--version-ignore``
      - ``[version].ignore``
      - ``BUMPWRIGHT_VERSION_IGNORE``
+   * - ``--commit``
+     - (n/a)
+     - ``BUMPWRIGHT_COMMIT``
    * - ``--tag``
      - (n/a)
      - ``BUMPWRIGHT_TAG``
@@ -70,6 +79,9 @@ This table maps configuration options between the command line, ``bumpwright.tom
    * - ``--stats``
      - (n/a)
      - ``BUMPWRIGHT_STATS``
+   * - ``--local-time``
+     - (n/a)
+     - ``BUMPWRIGHT_LOCAL_TIME``
    * - ``--rollback``
      - (n/a)
      - ``BUMPWRIGHT_ROLLBACK``

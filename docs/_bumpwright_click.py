@@ -256,6 +256,14 @@ def decide(
         "(repeatable). Combined with patterns from [changelog].exclude."
     ),
 )
+@click.option(
+    "--show-skipped",
+    is_flag=True,
+    help=(
+        "Display files skipped during version updates (affects text/md output) "
+        "and include the 'skipped' field in JSON output."
+    ),
+)
 @click.pass_obj
 def bump(args: argparse.Namespace, **kwargs: object) -> int:
     """Update version metadata and optionally commit and tag the change.

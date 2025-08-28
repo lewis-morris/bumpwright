@@ -532,10 +532,18 @@ Environment variables
      - ``None``
      - ``--repo-url``
      - decide, bump
+   * - ``BUMPWRIGHT_SHOW_SKIPPED``
+     - ``False``
+     - ``--show-skipped``
+     - bump, history
    * - ``BUMPWRIGHT_EXPLAIN``
      - ``False``
      - ``--explain``
      - decide, bump
+   * - ``BUMPWRIGHT_EMIT_CHANGELOG``
+     - ``False``
+     - ``--emit-changelog``
+     - decide
    * - ``BUMPWRIGHT_ENABLE_ANALYSER``
      - ``-``
      - ``--enable-analyser``
@@ -560,6 +568,10 @@ Environment variables
      - ``False``
      - ``--tag``
      - bump
+   * - ``BUMPWRIGHT_COMMIT``
+     - ``False``
+     - ``--commit``
+     - bump
    * - ``BUMPWRIGHT_DRY_RUN``
      - ``False``
      - ``--dry-run``
@@ -579,6 +591,10 @@ Environment variables
    * - ``BUMPWRIGHT_STATS``
      - ``False``
      - ``--stats``
+     - history
+   * - ``BUMPWRIGHT_LOCAL_TIME``
+     - ``False``
+     - ``--local-time``
      - history
    * - ``BUMPWRIGHT_ROLLBACK``
      - ``None``
@@ -613,8 +629,14 @@ Environment variables
 ``BUMPWRIGHT_REPO_URL``
     Base repository URL for linking commit hashes in Markdown output.
 
+``BUMPWRIGHT_SHOW_SKIPPED``
+    Include skipped files in text/Markdown output and add the ``skipped`` field in JSON.
+
 ``BUMPWRIGHT_EXPLAIN``
     Show reasoning behind the selected bump level.
+
+``BUMPWRIGHT_EMIT_CHANGELOG``
+    When set during ``decide``, also render the expected changelog to stdout.
 
 ``BUMPWRIGHT_ENABLE_ANALYSER``
     Enable analyser names in addition to configuration.
@@ -634,6 +656,9 @@ Environment variables
 ``BUMPWRIGHT_TAG``
     Create a git tag for the new version.
 
+``BUMPWRIGHT_COMMIT``
+    Create a git commit for the version change.
+
 ``BUMPWRIGHT_DRY_RUN``
     Display the new version without modifying any files.
 
@@ -649,6 +674,9 @@ Environment variables
 ``BUMPWRIGHT_STATS``
     Include line change statistics between successive tags.
 
+``BUMPWRIGHT_LOCAL_TIME``
+    Display commit dates in local time instead of ISO-8601.
+
 ``BUMPWRIGHT_ROLLBACK``
     Delete a tag and restore files to the previous commit.
 
@@ -662,4 +690,3 @@ CLI equivalents
 
 Many configuration keys have corresponding command-line flags. For a complete
 mapping, see the :doc:`cli_reference`.
-
