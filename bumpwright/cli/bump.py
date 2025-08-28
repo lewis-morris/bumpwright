@@ -212,12 +212,14 @@ def _prepare_version_files(
     if args.version_path:
         paths.extend(args.version_path)
     changed = _safe_changed_paths(base, head, cwd=pyproject.parent)
+    logger.debug("Changed paths between %s..%s: %s", base, head, sorted(changed))
     root = pyproject.parent
     filtered = {
         p
         for p in changed
         if p != pyproject.name and not _matches_version_path(p, paths, root)
     }
+    logger.debug("Relevant non-version paths: %s", sorted(filtered))
     if not filtered:
         return None
     return paths
