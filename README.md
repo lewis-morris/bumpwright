@@ -45,8 +45,7 @@ Get started with the [Quickstart guide](https://lewis-morris.github.io/bumpwrigh
 pip install bumpwright  # Python 3.11+
 ```
 
-Bumpwright now uses Python's built-in `tomllib`, removing the need for the
-external `tomli` dependency.
+Bumpwright uses `tomlkit` for TOML parsing/writing to preserve formatting and comments in `pyproject.toml`.
 
 Full details: [Installation](https://lewis-morris.github.io/bumpwright/quickstart.html#installation)
 
