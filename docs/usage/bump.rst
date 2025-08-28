@@ -11,6 +11,7 @@ Primary options
 
 * ``--base BASE`` – base git reference when auto-deciding the level.
 * ``--head HEAD`` – head git reference.
+* ``--show-skipped`` – include a section listing skipped files (in ``text``/``md``) and add the ``skipped`` field in ``json`` output.
 * ``--commit`` – create a git commit for the version change.
 * ``--tag`` – create a git tag for the new version.
 * ``--dry-run`` – preview changes without modifying any files.
@@ -28,6 +29,7 @@ Arguments
 
 ``--format {text,md,json}``
     Output style. ``text`` prints plain console output, ``md`` emits Markdown, and ``json`` produces machine-readable data. Defaults to ``text``.
+    When using ``json``, the ``skipped`` field is emitted only when ``--show-skipped`` is provided (or ``BUMPWRIGHT_SHOW_SKIPPED=1`` is set).
 
 ``--explain``
     Log detected impacts, applied rules, and chosen bump level before any files are modified.
