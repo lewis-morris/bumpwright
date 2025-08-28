@@ -5,9 +5,10 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-from bumpwright import gitutils
+from bumpwright import gitutils, public_api
 from bumpwright.analysers.cli import _build_cli_at_ref
 from bumpwright.analysers.utils import clear_caches, parse_python_source
+from bumpwright.compare import diff_public_api
 
 
 def _init_repo(tmp_path: Path) -> Path:
@@ -67,3 +68,34 @@ def test_build_cli_uses_cached_ast(tmp_path: Path) -> None:
         finally:
             os.chdir(old)
         assert ap.call_count == 1  # noqa: PLR2004
+
+
+def test_api_diff_detects_changes_after_commit(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path)
+    clear_caches()
+    old = os.getcwd()
+    os.chdir(repo)
+    try:
+        impacts1 = diff_public_api(
+            public_api.build_api_at_ref("HEAD", ["pkg"], [], ["_"]),
+            public_api.build_api_at_ref("HEAD", ["pkg"], [], ["_"]),
+        )
+        assert impacts1 == []
+        Path("pkg/cli.py").write_text(
+            """
+import click
+
+@click.command()
+def main() -> None:
+    return 1
+"""
+        )
+        gitutils._run(["git", "add", "pkg/cli.py"], str(repo))
+        gitutils._run(["git", "commit", "-m", "feat: change"], str(repo))
+        impacts2 = diff_public_api(
+            public_api.build_api_at_ref("HEAD^", ["pkg"], [], ["_"]),
+            public_api.build_api_at_ref("HEAD", ["pkg"], [], ["_"]),
+        )
+    finally:
+        os.chdir(old)
+    assert any(i.symbol == "cli:main" for i in impacts2)

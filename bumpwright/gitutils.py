@@ -119,6 +119,24 @@ def run_git(
         ) from exc
 
 
+def _resolve_ref(ref: str, cwd: str | None = None) -> str:
+    """Return the commit hash for ``ref``.
+
+    Args:
+        ref: Git reference to resolve.
+        cwd: Repository path.
+
+    Returns:
+        Resolved commit hash.
+
+    Raises:
+        subprocess.CalledProcessError: If ``git rev-parse`` fails.
+    """
+
+    out = _run(["git", "rev-parse", ref], cwd)
+    return out.strip()
+
+
 def changed_paths(base: str, head: str, cwd: str | None = None) -> set[str]:
     """Return paths changed between two git references.
 
@@ -220,7 +238,8 @@ def list_py_files_at_ref(
 
     roots_tuple = tuple(roots)
     ignores_tuple = tuple(ignore_globs or ())
-    return set(_list_py_files_at_ref_cached(ref, roots_tuple, ignores_tuple, cwd))
+    commit = _resolve_ref(ref, cwd)
+    return set(_list_py_files_at_ref_cached(commit, roots_tuple, ignores_tuple, cwd))
 
 
 list_py_files_at_ref.cache_clear = _list_py_files_at_ref_cached.cache_clear  # type: ignore[attr-defined]
@@ -338,7 +357,8 @@ def read_files_at_ref(
     """
 
     paths_tuple = tuple(paths)
-    return dict(_read_files_at_ref_cached(ref, paths_tuple, cwd))
+    commit = _resolve_ref(ref, cwd)
+    return dict(_read_files_at_ref_cached(commit, paths_tuple, cwd))
 
 
 read_files_at_ref.cache_clear = _read_files_at_ref_cached.cache_clear  # type: ignore[attr-defined]
