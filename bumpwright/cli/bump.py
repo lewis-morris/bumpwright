@@ -98,7 +98,13 @@ def _resolve_pyproject(path: str) -> Path:
     if candidate.is_file():
         return candidate
     if candidate.name == "pyproject.toml":
-        found = find_pyproject()
+        # Prefer searching from the provided parent directory when available,
+        # but fall back to the legacy no-arg call to preserve compatibility
+        # with tests or callers that monkeypatch without parameters.
+        try:
+            found = find_pyproject(candidate.parent)
+        except TypeError:  # backwards-compatible with no-arg monkeypatching
+            found = find_pyproject()
         if found:
             return found
     raise FileNotFoundError(f"pyproject.toml not found at {path}")
@@ -147,7 +153,7 @@ def _safe_changed_paths(
         raise GitDiffError(base, head) from exc
 
 
-def _matches_version_path(path: str, patterns: Iterable[str]) -> bool:
+def _matches_version_path(path: str, patterns: Iterable[str], root: Path) -> bool:
     """Check whether ``path`` matches any version file pattern.
 
     Args:
@@ -163,15 +169,16 @@ def _matches_version_path(path: str, patterns: Iterable[str]) -> bool:
         modules from being ignored during bump detection.
     """
 
-    abs_path = str(Path(path).resolve())
+    file_path = (root / path).resolve()
+    abs_path = str(file_path)
     for pat in patterns:
         if fnmatch(path, pat) or fnmatch(abs_path, pat):
-            if Path(path).name == "__init__.py":
+            if file_path.name == "__init__.py":
                 try:
                     # Only classify as a version file if it actually defines
                     # ``__version__``. Otherwise, treat the change as a normal
                     # source modification.
-                    if "__version__" not in Path(path).read_text(encoding="utf-8"):
+                    if "__version__" not in file_path.read_text(encoding="utf-8"):
                         continue
                 except OSError:
                     # If the file cannot be read, conservatively treat it as a
@@ -205,10 +212,11 @@ def _prepare_version_files(
     if args.version_path:
         paths.extend(args.version_path)
     changed = _safe_changed_paths(base, head, cwd=pyproject.parent)
+    root = pyproject.parent
     filtered = {
         p
         for p in changed
-        if p != pyproject.name and not _matches_version_path(p, paths)
+        if p != pyproject.name and not _matches_version_path(p, paths, root)
     }
     if not filtered:
         return None
