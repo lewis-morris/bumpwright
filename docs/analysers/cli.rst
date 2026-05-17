@@ -54,7 +54,7 @@ Severity Rules
    * - Added required option
      - ``major``
    * - Removed optional option
-     - ``minor``
+     - ``major``
    * - Removed required option
      - ``major``
    * - Option became optional

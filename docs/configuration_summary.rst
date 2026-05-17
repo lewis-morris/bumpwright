@@ -40,6 +40,9 @@ This table maps configuration options between the command line, ``bumpwright.tom
    * - ``--explain``
      - (n/a)
      - ``BUMPWRIGHT_EXPLAIN``
+   * - ``--no-impl-change-patch``
+     - (n/a)
+     - ``BUMPWRIGHT_NO_IMPL_CHANGE_PATCH``
    * - ``--emit-changelog``
      - (n/a)
      - ``BUMPWRIGHT_EMIT_CHANGELOG``

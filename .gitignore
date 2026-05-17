@@ -8,6 +8,8 @@ __pycache__/
 *.pyc
 .coverage
 coverage.xml
+coverage.json
+coverage.lcov
 node_modules/
 .pnp/
 .yarn/cache/

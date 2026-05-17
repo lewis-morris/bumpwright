@@ -3,9 +3,11 @@ Analysers Guide
 
 Analysers inspect different facets of your project to detect API changes.
 Bumpwright ships optional analysers for the :doc:`CLI <cli>`, :doc:`gRPC <grpc>` services,
-:doc:`web routes <web_routes>`, :doc:`database migrations <migrations>`, :doc:`OpenAPI documents <openapi>`
-and :doc:`GraphQL schemas <graphql>`. The table below lists each analyser, the key used
-to configure it, and the CLI flag to enable it for a single run.
+:doc:`web routes <web_routes>`, :doc:`database migrations <migrations>`,
+:doc:`OpenAPI documents <openapi>`, :doc:`GraphQL schemas <graphql>` and
+:doc:`JavaScript/TypeScript exports <javascript>`. The table below lists each
+analyser, the key used to configure it, and the CLI flag to enable it for a
+single run.
 
 .. list-table:: Available analysers
    :header-rows: 1
@@ -31,6 +33,9 @@ to configure it, and the CLI flag to enable it for a single run.
    * - :doc:`GraphQL <graphql>`
      - ``graphql``
      - ``--enable-analyser graphql``
+   * - :doc:`JavaScript/TypeScript <javascript>`
+     - ``javascript``
+     - ``--enable-analyser javascript``
 
 Enable analysers in ``bumpwright.toml``:
 
@@ -43,6 +48,7 @@ Enable analysers in ``bumpwright.toml``:
    migrations = true # enable migrations analysis
    openapi = true    # enable OpenAPI analysis
    graphql = true    # enable GraphQL analysis
+   javascript = true # enable JavaScript/TypeScript export analysis
 
    [migrations]
    paths = ["migrations"]  # directories with Alembic scripts
@@ -86,6 +92,7 @@ The analyser includes ``foo`` and ``Bar.baz`` in the public API, while
    migrations
    openapi
    graphql
+   javascript
 
 - :doc:`cli` – Track command-line interface changes.
 - :doc:`grpc` – Detect gRPC service or method updates.
@@ -93,3 +100,4 @@ The analyser includes ``foo`` and ``Bar.baz`` in the public API, while
 - :doc:`migrations` – Scan database migrations for schema impacts.
 - :doc:`openapi` – Compare OpenAPI specs for endpoint drift.
 - :doc:`graphql` – Flag GraphQL schema alterations.
+- :doc:`javascript` – Detect exported JavaScript and TypeScript API changes.

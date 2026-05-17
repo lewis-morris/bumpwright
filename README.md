@@ -33,7 +33,7 @@ Bumpwright compares two Git references—usually the last release tag and the cu
 
 - **Baseline required** – needs a baseline reference (e.g., prior release tag); run `bumpwright init` to mark it.
 - **Static analysis limits** – cannot account for runtime-specific changes or internal logic.
-- **Python 3.11+** – focuses on Python projects and requires Python 3.11 or newer.
+- **Python 3.11+ runtime** – the tool runs on Python 3.11 or newer. Python public API analysis is built in; JavaScript/TypeScript support is available through an opt-in analyser.
 
 Get started with the [Quickstart guide](https://lewis-morris.github.io/bumpwright/quickstart.html).
 
@@ -45,7 +45,7 @@ Get started with the [Quickstart guide](https://lewis-morris.github.io/bumpwrigh
 pip install bumpwright  # Python 3.11+
 ```
 
-Bumpwright uses `tomlkit` for TOML parsing/writing to preserve formatting and comments in `pyproject.toml`.
+Bumpwright uses `tomlkit` for TOML parsing/writing to preserve formatting and comments in `pyproject.toml`. Node projects can use `package.json` as the project metadata file.
 
 Full details: [Installation](https://lewis-morris.github.io/bumpwright/quickstart.html#installation)
 
@@ -92,6 +92,7 @@ web_routes = false
 migrations = false
 openapi = false
 graphql = false
+javascript = false
 
 [changelog]
 # path = "CHANGELOG.md"   # optional default target for --changelog
@@ -99,7 +100,7 @@ repo_url = "https://github.com/me/project"  # link commits and compares
 
 [version]
 scheme = "semver"   # "semver" | "calver"
-# paths / ignore have robust defaults
+# paths / ignore have robust defaults, including package.json/package-lock.json
 ```
 
 All options and defaults: [Configuration](https://lewis-morris.github.io/bumpwright/configuration.html) • Versioning schemes: [Versioning](https://lewis-morris.github.io/bumpwright/versioning.html)
@@ -110,6 +111,7 @@ All options and defaults: [Configuration](https://lewis-morris.github.io/bumpwri
 
 - Choose output with `--format text|md|json` for human/CI consumption.
 - Generate release notes with a Jinja2 template via `--changelog` (and `--repo-url` or `[changelog].repo_url` for compare/commit links).
+- Python callers can import `bumpwright.api.decide_project_bump(...)` to get the same decision as structured data. Pass `include_worktree=True` to analyse staged, unstaged, and untracked working-tree changes before they are committed.
 
 Template context includes: `version`, `date`, `release_datetime_iso`, `commits[sha,subject,link]`, `previous_tag`, `compare_url`, `contributors[name,link]`, `breaking_changes`, `repo_url`.
 
@@ -130,6 +132,7 @@ Enable what you need in `[analysers]` or per-run with `--enable-analyser/--disab
 - **Migrations** – Alembic schema impacts.  
 - **OpenAPI** – spec diffs.  
 - **GraphQL** – schema diffs.
+- **JavaScript/TypeScript** – exported ESM and CommonJS API changes, with `package.json` `main`/`exports` entrypoint discovery.
 
 Overview & per-analyser docs: [Analysers](https://lewis-morris.github.io/bumpwright/analysers/)
 

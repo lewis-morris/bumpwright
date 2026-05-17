@@ -74,13 +74,17 @@ def _removed_params(
     impacts: list[Impact] = []
     for name, op in oldp.items():
         if name not in newp:
-            if op.kind in ("posonly", "pos", "kwonly") and op.default is None:
+            if op.kind in ("vararg", "varkw"):
+                impacts.append(
+                    Impact("major", fullname, f"Removed variadic param '{name}'")
+                )
+            elif op.kind in ("posonly", "pos", "kwonly") and op.default is None:
                 impacts.append(
                     Impact("major", fullname, f"Removed required param '{name}'")
                 )
-            elif op.default is not None or op.kind in ("kwonly", "vararg", "varkw"):
+            elif op.default is not None:
                 impacts.append(
-                    Impact("minor", fullname, f"Removed optional param '{name}'")
+                    Impact("major", fullname, f"Removed optional param '{name}'")
                 )
     return impacts
 

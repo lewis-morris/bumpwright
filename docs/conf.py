@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.abspath("."))
 sys.path.append(os.path.abspath("./_ext"))
 
 import bumpwright
+import sphinx_click.ext
+from sphinx.ext.autodoc.mock import mock as autodoc_mock
 
 project = "bumpwright"
 author = "Lewis Morris (arched.dev)"
@@ -120,6 +122,12 @@ html_theme_options = dict(
         ]
     ),
 )
+
+# sphinx-click 6.2 can pick up the ``sphinx.ext.autodoc.mock`` module object
+# instead of the callable helper under newer Sphinx releases. Normalise it so
+# ``.. click::`` directives keep working during docs builds.
+if not callable(sphinx_click.ext.mock):
+    sphinx_click.ext.mock = autodoc_mock
 
 
 def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:

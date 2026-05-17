@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import logging
 import os
@@ -156,6 +157,19 @@ def _extra_file_impacts(base: str, head: str, cfg: Config) -> list[Impact]:
     return impacts
 
 
+def _module_ast_dump_at_ref(ref: str, path: str) -> str | None:
+    """Return a normalised AST dump for ``path`` at ``ref`` when parseable."""
+
+    source = read_file_at_ref(ref, path)
+    if source is None:
+        return None
+    try:
+        tree = ast.parse(source)
+    except (SyntaxError, UnicodeDecodeError):
+        return None
+    return ast.dump(tree, include_attributes=False)
+
+
 def _public_module_impacts(
     base: str, head: str, cfg: Config, existing: list[Impact]
 ) -> list[Impact]:
@@ -201,6 +215,10 @@ def _public_module_impacts(
             for root in cfg.project.public_roots
         )
         if not in_root or path in accounted:
+            continue
+        old_ast = _module_ast_dump_at_ref(base, path)
+        new_ast = _module_ast_dump_at_ref(head, path)
+        if old_ast is not None and old_ast == new_ast:
             continue
         impacts.append(Impact("patch", path, "Modified public module"))
     return impacts
@@ -275,7 +293,8 @@ def _collect_impacts(
     impacts.extend(api_impacts)
     impacts.extend(analyser_impacts)
     impacts.extend(extra_impacts)
-    impacts.extend(_public_module_impacts(base, head, cfg, api_impacts + extra_impacts))
+    if not getattr(args, "no_impl_change_patch", False):
+        impacts.extend(_public_module_impacts(base, head, cfg, api_impacts + extra_impacts))
     return impacts
 
 

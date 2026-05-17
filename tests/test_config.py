@@ -53,6 +53,30 @@ def test_load_config_changelog_default(tmp_path: Path) -> None:
     assert cfg.changelog.repo_url == ""
 
 
+def test_load_config_javascript_defaults(tmp_path: Path) -> None:
+    cfg = load_config(tmp_path / "missing.toml")
+    assert cfg.javascript.package_json == "package.json"
+    assert cfg.javascript.roots == ["src", "lib", "."]
+    assert ".ts" in cfg.javascript.extensions
+    assert cfg.javascript.entrypoints == []
+
+
+def test_load_config_javascript_section(tmp_path: Path) -> None:
+    cfg_file = tmp_path / "bumpwright.toml"
+    cfg_file.write_text(
+        "[javascript]\n"
+        "package_json='frontend/package.json'\n"
+        "roots=['frontend/src']\n"
+        "extensions=['.js']\n"
+        "entrypoints=['frontend/src/index.js']\n"
+    )
+    cfg = load_config(cfg_file)
+    assert cfg.javascript.package_json == "frontend/package.json"
+    assert cfg.javascript.roots == ["frontend/src"]
+    assert cfg.javascript.extensions == [".js"]
+    assert cfg.javascript.entrypoints == ["frontend/src/index.js"]
+
+
 def test_load_config_repo_url_from_string(monkeypatch) -> None:
     """Parse ``repo_url`` when provided with a TOML string."""
 

@@ -30,7 +30,7 @@ def test_decide_flag_detects_no_api_changes(tmp_path: Path) -> None:
         text=True,
         env=env,
     )
-    assert "bumpwright suggests: patch" in res_decide.stderr
+    assert "bumpwright suggests: None" in res_decide.stderr
 
     res_decide_json = subprocess.run(
         [
@@ -49,9 +49,9 @@ def test_decide_flag_detects_no_api_changes(tmp_path: Path) -> None:
         env=env,
     )
     data = json.loads(res_decide_json.stderr)
-    assert data["level"] == "patch"
-    assert data["confidence"] == 1.0
-    assert data["reasons"] == ["Modified public symbol"]
+    assert data["level"] is None
+    assert data["confidence"] == 0.0
+    assert data["reasons"] == []
 
     res_bump = subprocess.run(
         [sys.executable, "-m", "bumpwright.cli", "bump"],
@@ -62,4 +62,4 @@ def test_decide_flag_detects_no_api_changes(tmp_path: Path) -> None:
         text=True,
         env=env,
     )
-    assert "bumpwright bumped version" in res_bump.stderr
+    assert "No version bump needed" in res_bump.stderr

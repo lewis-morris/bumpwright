@@ -4,8 +4,8 @@ history – list & rollback releases
 Display existing Git tags alongside their version numbers. If the project's
 current version differs from the latest tag, a warning is emitted. Output can
 be formatted as plain text, Markdown, or JSON, and previous releases may be
-rolled back or purged when necessary. Dates default to ISO-8601 in UTC; pass
-``--local-time`` for human-readable local output.
+rolled back or purged when necessary. Dates default to Git's ISO-8601 commit
+timestamp; pass ``--local-time`` for human-readable local output.
 
 Undo a bump
 -----------
@@ -25,10 +25,12 @@ Primary options
 * ``--rollback TAG`` – Delete ``TAG`` and restore versioned files to the previous
   commit without touching untracked files. A new commit titled
   ``chore(release): undo TAG`` is created when changes are detected. Remember to
-  push the tag deletion and the commit to your remote repository.
+  push the tag deletion and the commit to your remote repository. The worktree
+  must be clean before running rollback.
 * ``--purge`` – Remove all bumpwright release tags and commits, restoring
   versioned files while leaving other commits untouched and requiring the
-  project to be reinitialised.
+  project to be reinitialised. Purge also requires a clean worktree apart from
+  version-file changes it can safely restore.
 
 Dry run
 -------
@@ -92,7 +94,7 @@ Rollback
 Undo a tagged release by supplying the tag name to ``--rollback``. The command
 deletes the tag locally and reverts only the versioned files and changelog to
 their previous state. All other files remain untouched, and a commit recording
-the reversal is created.
+the reversal is created. Uncommitted changes cause the rollback to abort.
 
 .. code-block:: console
 
@@ -133,7 +135,8 @@ Purge
 -----
 
 Remove all bumpwright-generated releases and tags, restoring versioned files to
-their prior state and leaving the repository uninitialised. Push the tag
+their prior state and leaving the repository uninitialised. Uncommitted changes
+outside the managed version files abort the purge. Push the tag
 deletions to your remote repository after running the command:
 
 .. code-block:: console

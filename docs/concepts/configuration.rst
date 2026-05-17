@@ -45,6 +45,9 @@ map before diving into the detailed references.
    * - :ref:`OpenAPI <config-openapi>`
      - Configure OpenAPI specification paths.
      - Analysis
+   * - :ref:`JavaScript <config-javascript>`
+     - Configure JavaScript and TypeScript export analysis.
+     - Analysis
    * - :ref:`Version <config-version>`
      - Control version file detection and scheme.
      - Output
@@ -180,7 +183,7 @@ Added optional parameter
 Removed required parameter
     ``major``
 Removed optional parameter
-    ``minor``
+    ``major``
 Parameter kind changed
     ``major``
 Parameter default added or changed
@@ -290,6 +293,7 @@ Analysers
    migrations = false
    openapi = false
    graphql = false
+   javascript = false
 
 .. list-table::
    :header-rows: 1
@@ -315,6 +319,9 @@ Analysers
    * - ``graphql``
      - ``false``
      - ``--enable-analyser graphql``
+   * - ``javascript``
+     - ``false``
+     - ``--enable-analyser javascript``
 
 cli
     Detects changes to command-line interfaces implemented with ``argparse`` or ``click``.
@@ -328,6 +335,8 @@ openapi
     Detects changes to OpenAPI specification files.
 graphql
     Detects GraphQL schema changes.
+javascript
+    Detects changes to exported JavaScript and TypeScript APIs.
 
 .. _config-migrations:
 
@@ -357,6 +366,50 @@ paths
     Default: ``["openapi.yaml", "openapi.yml", "openapi.json"]``
     Paths to OpenAPI specification documents.
 
+.. _config-javascript:
+
+JavaScript
+~~~~~~~~~~
+
+.. code-block:: toml
+
+   [javascript]
+   package_json = "package.json"
+   roots = ["src", "lib", "."]
+   extensions = [".js", ".mjs", ".cjs", ".ts", ".tsx", ".d.ts"]
+   entrypoints = []
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - Default
+     - CLI flag
+   * - ``package_json``
+     - ``"package.json"``
+     - (none)
+   * - ``roots``
+     - ``["src", "lib", "."]``
+     - (none)
+   * - ``extensions``
+     - ``[".js", ".mjs", ".cjs", ".ts", ".tsx", ".d.ts"]``
+     - (none)
+   * - ``entrypoints``
+     - ``[]``
+     - (none)
+
+package_json
+    Path to package metadata. When no explicit ``entrypoints`` are configured,
+    the JavaScript analyser uses ``main``, ``module``, ``types``, ``typings``,
+    ``browser`` and ``exports`` to discover the public package surface.
+roots
+    Directories scanned for JavaScript and TypeScript modules.
+extensions
+    File extensions included by the analyser.
+entrypoints
+    Specific files to include in addition to files under ``roots``. When empty,
+    package metadata may restrict scanning to declared entrypoints.
+
 .. _config-version:
 
 Version
@@ -367,6 +420,8 @@ Version
    [version]
    paths = [
        "pyproject.toml",
+       "package.json",
+       "package-lock.json",
        "setup.py",
        "setup.cfg",
        "**/__init__.py",
@@ -392,7 +447,7 @@ Version
      - Default
      - CLI flag
    * - ``paths``
-     - ``["pyproject.toml", "setup.py", "setup.cfg", "**/__init__.py", "**/version.py", "**/_version.py"]``
+     - ``["pyproject.toml", "package.json", "package-lock.json", "setup.py", "setup.cfg", "**/__init__.py", "**/version.py", "**/_version.py"]``
      - ``--version-path``
    * - ``ignore``
      - ``["build/**", "dist/**", "*.egg-info/**", ".eggs/**", ".venv/**", "venv/**", ".env/**", "**/__pycache__/**"]``
@@ -402,7 +457,8 @@ Version
      - (none)
 
 paths
-    Glob patterns scanned for version declarations.
+    Glob patterns scanned for version declarations. Defaults include Python
+    metadata and Node ``package.json`` / ``package-lock.json`` files.
 ignore
     Glob patterns appended to the default exclusion list for version replacement.
 scheme
@@ -535,10 +591,14 @@ Environment variables
    * - ``BUMPWRIGHT_SHOW_SKIPPED``
      - ``False``
      - ``--show-skipped``
-     - bump, history
+     - bump
    * - ``BUMPWRIGHT_EXPLAIN``
      - ``False``
      - ``--explain``
+     - decide, bump
+   * - ``BUMPWRIGHT_NO_IMPL_CHANGE_PATCH``
+     - ``False``
+     - ``--no-impl-change-patch``
      - decide, bump
    * - ``BUMPWRIGHT_EMIT_CHANGELOG``
      - ``False``
@@ -635,6 +695,9 @@ Environment variables
 ``BUMPWRIGHT_EXPLAIN``
     Show reasoning behind the selected bump level.
 
+``BUMPWRIGHT_NO_IMPL_CHANGE_PATCH``
+    Ignore implementation-only changes to public symbols when deciding the bump.
+
 ``BUMPWRIGHT_EMIT_CHANGELOG``
     When set during ``decide``, also render the expected changelog to stdout.
 
@@ -645,7 +708,7 @@ Environment variables
     Disable analyser names even if configured.
 
 ``BUMPWRIGHT_PYPROJECT``
-    Path to the project's ``pyproject.toml`` file.
+    Path to the project's ``pyproject.toml`` or ``package.json`` file.
 
 ``BUMPWRIGHT_VERSION_PATH``
     Additional glob pattern for files containing the project version.

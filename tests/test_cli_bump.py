@@ -87,3 +87,44 @@ def test_bump_tag_failure(
     assert res == 1
     assert "Failed to create tag" in caplog.text
     assert "boom" not in caplog.text
+
+
+def test_bump_command_updates_node_package_json(
+    monkeypatch, tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Node-only projects should bump package.json from JavaScript impacts."""
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    run(["git", "init"], repo)
+    run(["git", "config", "user.email", "a@b.c"], repo)
+    run(["git", "config", "user.name", "tester"], repo)
+    (repo / "package.json").write_text(
+        '{\n  "name": "demo",\n  "version": "1.2.3"\n}\n',
+        encoding="utf-8",
+    )
+    src = repo / "src"
+    src.mkdir()
+    (src / "index.js").write_text(
+        "export function run(task) { return task; }\n", encoding="utf-8"
+    )
+    (repo / "bumpwright.toml").write_text(
+        "[analysers]\njavascript = true\n[javascript]\nroots = ['src']\n",
+        encoding="utf-8",
+    )
+    run(["git", "add", "."], repo)
+    run(["git", "commit", "-m", "base"], repo)
+    (src / "index.js").write_text(
+        "export function run(task, env = {}) { return task; }\n",
+        encoding="utf-8",
+    )
+    run(["git", "add", "src/index.js"], repo)
+    run(["git", "commit", "-m", "feat: add optional env"], repo)
+
+    monkeypatch.chdir(repo)
+    with caplog.at_level(logging.INFO):
+        result = bump_command(_args())
+
+    assert result == 0
+    assert '"version": "1.3.0"' in (repo / "package.json").read_text(encoding="utf-8")
+    assert "bumpwright bumped version: 1.2.3 -> 1.3.0 (minor)" in caplog.text

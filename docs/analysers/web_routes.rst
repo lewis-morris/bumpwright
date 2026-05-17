@@ -54,7 +54,7 @@ Severity Rules
    * - Added required param
      - ``major``
    * - Removed optional param
-     - ``minor``
+     - ``major``
    * - Removed required param
      - ``major``
    * - Param became optional

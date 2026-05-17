@@ -162,8 +162,8 @@ def a():
     assert any(i.severity == "major" and "Removed required param 'q'" in i.reason for i in impacts)
 
 
-def test_removed_optional_param_is_minor() -> None:
-    """Removing an optional parameter is a minor impact."""
+def test_removed_optional_param_is_major() -> None:
+    """Removing an optional accepted parameter is a major impact."""
 
     old = _build(
         """
@@ -186,7 +186,7 @@ def a():
 """,
     )
     impacts = diff_routes(old, new)
-    assert any(i.severity == "minor" and "Removed optional param 'q'" in i.reason for i in impacts)
+    assert any(i.severity == "major" and "Removed optional param 'q'" in i.reason for i in impacts)
 
 
 def test_added_required_param_is_major() -> None:

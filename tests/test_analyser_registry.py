@@ -28,7 +28,9 @@ def test_register_records_metadata() -> None:
             def collect(self, ref: str) -> object:  # pragma: no cover - trivial
                 return {}
 
-            def compare(self, old: object, new: object) -> list[Impact]:  # pragma: no cover - trivial
+            def compare(
+                self, old: object, new: object
+            ) -> list[Impact]:  # pragma: no cover - trivial
                 return []
 
         assert "dummy" in available()
@@ -52,3 +54,10 @@ def test_load_enabled_errors_for_unknown() -> None:
     finally:
         analysers.REGISTRY.clear()
         analysers.REGISTRY.update(backup)
+
+
+def test_builtin_javascript_analyser_is_registered() -> None:
+    assert "javascript" in available()
+    info = get_analyser_info("javascript")
+    assert info is not None
+    assert "JavaScript" in info.description

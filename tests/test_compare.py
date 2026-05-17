@@ -39,7 +39,21 @@ def test_removed_params_classify_optional_and_required():
         {p.name: p for p in old.params}, {p.name: p for p in new.params}, "m:f"
     )
     assert Impact(MAJOR, "m:f", "Removed required param 'x'") in impacts
-    assert Impact(MINOR, "m:f", "Removed optional param 'timeout'") in impacts
+    assert Impact(MAJOR, "m:f", "Removed optional param 'timeout'") in impacts
+
+
+def test_removed_varargs_and_kwargs_are_major() -> None:
+    old = _sig("m:f", [_p("args", kind="vararg"), _p("kwargs", kind="varkw")])
+    new = _sig("m:f", [])
+
+    impacts = _removed_params(
+        {p.name: p for p in old.params}, {p.name: p for p in new.params}, "m:f"
+    )
+
+    assert impacts == [
+        Impact(MAJOR, "m:f", "Removed variadic param 'args'"),
+        Impact(MAJOR, "m:f", "Removed variadic param 'kwargs'"),
+    ]
 
 
 def test_added_params_classify_optional_and_required():
@@ -211,7 +225,7 @@ def test_module_variable_change_triggers_patch() -> None:
     assert impacts == [Impact("patch", "m:CONST", "Modified public symbol")]
 
 
-def test_function_comment_change_triggers_patch() -> None:
+def test_function_comment_change_is_ignored() -> None:
     old_code = """
 def foo():
     # old comment
@@ -225,7 +239,7 @@ def foo():
     old = extract_public_api_from_source("m", old_code)
     new = extract_public_api_from_source("m", new_code)
     impacts = diff_public_api(old, new)
-    assert impacts == [Impact("patch", "m:foo", "Modified public symbol")]
+    assert impacts == []
 
 
 def test_diff_public_api_added_symbol():

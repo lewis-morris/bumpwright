@@ -93,13 +93,10 @@ def _hash_node(node: ast.AST, source: str | None) -> str:
         SHA256 digest of the node's source segment.
 
     Notes:
-        Falls back to :func:`ast.dump` when ``source`` is ``None``.
+        The hash is based on the parsed AST rather than raw source text so
+        comments and formatting-only edits do not trigger patch bumps.
     """
 
-    if source is not None:
-        segment = ast.get_source_segment(source, node)
-        if segment is not None:
-            return hashlib.sha256(segment.encode("utf-8")).hexdigest()
     dumped = ast.dump(node, include_attributes=False)
     return hashlib.sha256(dumped.encode("utf-8")).hexdigest()
 

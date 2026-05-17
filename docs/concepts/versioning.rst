@@ -23,7 +23,7 @@ See :ref:`configuration <config-rules>` for how to adjust these mappings.
    * - :doc:`Removed required parameter </analysers/index>`
      - ``major``
    * - :doc:`Removed optional parameter </analysers/index>`
-     - ``minor``
+     - ``major``
    * - :doc:`Parameter kind changed </analysers/index>`
      - ``major``
    * - :doc:`Parameter default added or changed </analysers/index>`
@@ -63,7 +63,8 @@ Summary
 ``bumpwright`` supports Semantic Versioning (``SemVer``) and
 Calendar Versioning (``CalVer``). Select a scheme via ``[version].scheme``
 (:ref:`config-version`); SemVer is the default. CalVer encodes the release
-date as ``YYYY.MM.PATCH``.
+date as ``YYYY.MM.PATCH`` and uses the current year and month when applying
+major or minor bumps.
 
 .. note::
 
@@ -88,9 +89,22 @@ SemVer vs CalVer
 
       Format: ``YYYY.MM.PATCH``
 
-      - major: ``2023.8.3`` → ``2024.1.0``
-      - minor: ``2023.8.3`` → ``2023.9.0``
-      - patch: ``2023.8.3`` → ``2023.8.4``
+      Assuming today's date is September 2024:
+
+      - major: ``2023.08.3`` → ``2024.09.0``
+      - minor: ``2023.08.3`` → ``2024.09.0``
+      - patch: ``2024.09.3`` → ``2024.09.4``
+      - patch on an older month: ``2023.08.3`` → ``2024.09.0``
+
+CalVer behaviour
+----------------
+
+CalVer in ``bumpwright`` is date-driven rather than arithmetic:
+
+- ``major`` and ``minor`` both reset the version to the current ``YYYY.MM.0``.
+- ``patch`` increments only when the current version already matches today's
+  year and month.
+- ``patch`` against an older month or year resets to the current ``YYYY.MM.0``.
 
 CLI
 ---
@@ -133,7 +147,7 @@ Apply a bump (:ref:`cli_reference:bump`):
       .. code-block:: console
 
          $ bumpwright --config calver.toml bump --dry-run --format md
-         New version: 2023.9.0
+         # output depends on today's date, for example 2024.09.0
 
 Glossary
 --------
@@ -144,4 +158,3 @@ local/build
    metadata after ``+`` used for build tracking.
 
 See :doc:`concepts/configuration` and :doc:`glossary` for details.
-

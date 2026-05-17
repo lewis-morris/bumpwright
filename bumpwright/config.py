@@ -115,6 +115,26 @@ class OpenAPI:
 
 
 @dataclass
+class JavaScript:
+    """Settings for the JavaScript/TypeScript analyser.
+
+    Attributes:
+        package_json: Path to the package metadata file when present.
+        roots: Directories containing public JavaScript or TypeScript modules.
+        extensions: File extensions to inspect.
+        entrypoints: Specific files to inspect in addition to ``roots``. Empty
+            means all matching files under ``roots`` are considered.
+    """
+
+    package_json: str = "package.json"
+    roots: list[str] = field(default_factory=lambda: ["src", "lib", "."])
+    extensions: list[str] = field(
+        default_factory=lambda: [".js", ".mjs", ".cjs", ".ts", ".tsx", ".d.ts"]
+    )
+    entrypoints: list[str] = field(default_factory=list)
+
+
+@dataclass
 class Changelog:
     """Changelog file configuration.
 
@@ -146,6 +166,8 @@ class VersionFiles:
     paths: list[str] = field(
         default_factory=lambda: [
             "pyproject.toml",
+            "package.json",
+            "package-lock.json",
             "setup.py",
             "setup.cfg",
             "**/__init__.py",
@@ -178,6 +200,7 @@ class Config:
         rules: Rules controlling version bumps.
         ignore: Paths to exclude when scanning.
         analysers: Optional analyser plugin settings.
+        javascript: JavaScript/TypeScript analyser settings.
         changelog: Changelog file path and template defaults.
         version: Locations containing version strings.
     """
@@ -188,6 +211,7 @@ class Config:
     analysers: Analysers = field(default_factory=Analysers)
     migrations: Migrations = field(default_factory=Migrations)
     openapi: OpenAPI = field(default_factory=OpenAPI)
+    javascript: JavaScript = field(default_factory=JavaScript)
     changelog: Changelog = field(default_factory=Changelog)
     version: VersionFiles = field(default_factory=VersionFiles)
 
@@ -269,6 +293,7 @@ def load_config(path: str | Path = "bumpwright.toml") -> Config:
     analysers = Analysers(enabled=enabled)
     migrations = Migrations(**d.get("migrations", {}))
     openapi = OpenAPI(**d.get("openapi", {}))
+    javascript = JavaScript(**d.get("javascript", {}))
     changelog = Changelog(**d.get("changelog", {}))
     version = VersionFiles(**d.get("version", {}))
     return Config(
@@ -278,6 +303,7 @@ def load_config(path: str | Path = "bumpwright.toml") -> Config:
         analysers=analysers,
         migrations=migrations,
         openapi=openapi,
+        javascript=javascript,
         changelog=changelog,
         version=version,
     )

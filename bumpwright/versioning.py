@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
@@ -20,6 +21,7 @@ from .version_schemes import get_version_scheme
 # Precompiled regex patterns for locating version assignments. The second
 # capture group extracts the existing version string for comparison.
 _VERSION_RE_PATTERNS: list[re.Pattern[str]] = [
+    re.compile(r'("version"\s*:\s*")([^"]+)(")'),
     re.compile(r"(__version__\s*=\s*['\"])([^'\"]+)(['\"])"),
     re.compile(r"(VERSION\s*=\s*['\"])([^'\"]+)(['\"])"),
     re.compile(r"(version\s*=\s*['\"])([^'\"]+)(['\"])"),
@@ -116,6 +118,33 @@ def find_pyproject(start: str | Path | None = None) -> Path | None:
     return None
 
 
+def find_package_json(start: str | Path | None = None) -> Path | None:
+    """Search upward from ``start`` for ``package.json``."""
+
+    path = Path(start or Path.cwd()).resolve()
+    for parent in [path, *path.parents]:
+        candidate = parent / "package.json"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def _read_package_json_version(path: Path) -> str:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return str(data["version"])
+    except KeyError as exc:
+        raise KeyError("version not found in package.json") from exc
+
+
+def _write_package_json_version(path: Path, new_version: str) -> None:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if "version" not in data:
+        raise KeyError("version not found in package.json")
+    data["version"] = new_version
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+
 def read_project_version(pyproject_path: str | Path = "pyproject.toml") -> str:
     """Read the project version from a ``pyproject.toml`` file.
 
@@ -138,6 +167,8 @@ def read_project_version(pyproject_path: str | Path = "pyproject.toml") -> str:
         p = find_pyproject(p.parent)
         if p is None:
             raise FileNotFoundError(f"pyproject.toml not found at {pyproject_path}")
+    if p.name == "package.json":
+        return _read_package_json_version(p)
     data = toml_parse(p.read_text(encoding="utf-8"))
     try:
         return str(data["project"]["version"])
@@ -167,6 +198,9 @@ def write_project_version(
         p = find_pyproject(p.parent)
         if p is None:
             raise FileNotFoundError(f"pyproject.toml not found at {pyproject_path}")
+    if p.name == "package.json":
+        _write_package_json_version(p, new_version)
+        return
     data = toml_parse(p.read_text(encoding="utf-8"))
     if "project" not in data:
         raise KeyError("No [project] table in pyproject.toml")
@@ -306,7 +340,10 @@ def _update_additional_files(
         except OSError:
             skipped.append(f)
             continue
-        if "__version__" not in text:
+        if "__version__" not in text and f.name not in {
+            "package.json",
+            "package-lock.json",
+        }:
             continue
         if _replace_version(f, old, new):
             changed.append(f)

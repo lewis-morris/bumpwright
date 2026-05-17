@@ -3,7 +3,7 @@ Quickstart
 
 .. _quickstart:
 
-Copy and paste the steps below to bump your first version.
+Copy and paste the steps below to bump your first version in a Python package. For Node-only repositories, point ``bumpwright bump --pyproject`` at ``package.json`` or rely on the built-in fallback when no ``pyproject.toml`` exists.
 
 Prerequisites
 -------------
@@ -81,4 +81,6 @@ Expected output:
    Updated files:
    - pyproject.toml
 
-For detailed options see :doc:`cli_reference` and :doc:`concepts/configuration`.
+By default, bumpwright updates version strings in common Python and Node metadata files, including ``pyproject.toml``, ``package.json``, ``package-lock.json``, ``setup.py``, ``setup.cfg``, and version-bearing ``__init__.py``/``version.py`` files.
+
+For detailed options see :doc:`cli_reference`, :doc:`concepts/configuration`, and :doc:`concepts/versioning`.

@@ -4,7 +4,7 @@ bumpwright bump
 
    bumpwright bump --commit --tag
 
-Update version information in ``pyproject.toml`` and other files. By default, ``bumpwright`` also searches ``setup.py``, ``setup.cfg`` and any ``__init__.py``, ``version.py`` or ``_version.py`` files for a version assignment. Files inside common build artefacts and virtual environments are ignored by default (``build/**``, ``dist/**``, ``*.egg-info/**``, ``.eggs/**``, ``.venv/**``, ``venv/**``, ``.env/**`` and ``**/__pycache__/**``). These locations can be customised via the ``[version]`` section in ``bumpwright.toml`` or augmented with ``--version-path`` and ``--version-ignore`` to add or exclude patterns. See :doc:`../guides/version-management/version-file-targeting` for targeting specific version files.
+Update version information in ``pyproject.toml``, ``package.json`` and other files. By default, ``bumpwright`` also searches ``package-lock.json``, ``setup.py``, ``setup.cfg`` and any ``__init__.py``, ``version.py`` or ``_version.py`` files for a version assignment. Files inside common build artefacts and virtual environments are ignored by default (``build/**``, ``dist/**``, ``*.egg-info/**``, ``.eggs/**``, ``.venv/**``, ``venv/**``, ``.env/**`` and ``**/__pycache__/**``). These locations can be customised via the ``[version]`` section in ``bumpwright.toml`` or augmented with ``--version-path`` and ``--version-ignore`` to add or exclude patterns. See :doc:`../guides/version-management/version-file-targeting` for targeting specific version files.
 
 Primary options
 ---------------
@@ -56,7 +56,7 @@ Arguments
     Regex pattern for commit subjects to exclude from changelog entries. Repeatable. Patterns from configuration are combined with CLI values.
 
 ``--pyproject PATH``
-    Path to the project's ``pyproject.toml`` file. Defaults to ``pyproject.toml``.
+    Path to the project's ``pyproject.toml`` or ``package.json`` file. Defaults to ``pyproject.toml`` and falls back to ``package.json`` when no ``pyproject.toml`` is found.
 
 ``--version-path GLOB``
     Glob pattern for files that contain the project version. May be repeated to update multiple locations. Defaults to none, using only the built-in search paths.

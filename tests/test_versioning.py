@@ -184,6 +184,56 @@ def test_read_project_version_errors(
         read_project_version(path)
 
 
+def test_read_project_version_from_package_json(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text('{"name":"demo","version":"1.2.3"}\n', encoding="utf-8")
+
+    assert read_project_version(package_json) == "1.2.3"
+
+
+def test_write_project_version_updates_package_json(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(
+        '{\n  "name": "demo",\n  "version": "1.2.3"\n}\n',
+        encoding="utf-8",
+    )
+
+    write_project_version("2.0.0", package_json)
+
+    assert read_project_version(package_json) == "2.0.0"
+    assert '"version": "2.0.0"' in package_json.read_text(encoding="utf-8")
+
+
+def test_apply_bump_updates_package_json_and_lockfile(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(
+        '{\n  "name": "demo",\n  "version": "1.2.3"\n}\n',
+        encoding="utf-8",
+    )
+    package_lock = tmp_path / "package-lock.json"
+    package_lock.write_text(
+        (
+            "{\n"
+            '  "name": "demo",\n'
+            '  "version": "1.2.3",\n'
+            '  "packages": {"": {"name": "demo", "version": "1.2.3"}}\n'
+            "}\n"
+        ),
+        encoding="utf-8",
+    )
+    cfg = load_config(tmp_path / "bumpwright.toml")
+
+    out = apply_bump("patch", package_json, cfg=cfg)
+
+    assert out.old == "1.2.3"
+    assert out.new == "1.2.4"
+    assert read_project_version(package_json) == "1.2.4"
+    lock_data = package_lock.read_text(encoding="utf-8")
+    assert '"version": "1.2.4"' in lock_data
+    assert package_json in out.files
+    assert package_lock in out.files
+
+
 def test_apply_bump(tmp_path: Path):
     py = tmp_path / "pyproject.toml"
     py.write_text(toml_dumps({"project": {"version": "0.1.0"}}))

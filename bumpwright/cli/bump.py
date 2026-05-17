@@ -19,7 +19,7 @@ from ..gitutils import (
     last_release_commit,
     run_git,
 )
-from ..versioning import VersionChange, apply_bump, find_pyproject
+from ..versioning import VersionChange, apply_bump, find_package_json, find_pyproject
 from .changelog import _build_changelog
 from .decide import _infer_level
 from .output import format_bullet_list
@@ -92,7 +92,7 @@ def _commit_tag(
 
 
 def _resolve_pyproject(path: str) -> Path:
-    """Locate ``pyproject.toml`` relative to ``path``."""
+    """Locate project metadata relative to ``path``."""
 
     candidate = Path(path)
     if candidate.is_file():
@@ -107,6 +107,9 @@ def _resolve_pyproject(path: str) -> Path:
             found = find_pyproject()
         if found:
             return found
+        package_json = find_package_json(candidate.parent)
+        if package_json:
+            return package_json
     raise FileNotFoundError(f"pyproject.toml not found at {path}")
 
 
@@ -317,13 +320,14 @@ def bump_command(args: argparse.Namespace) -> int:  # noqa: PLR0911
             disable_analyser (list[str]): Names of analysers to disable even if
                 configured.
 
-            pyproject (str): Path to ``pyproject.toml``. Defaults to
-                ``pyproject.toml``.
+            pyproject (str): Path to ``pyproject.toml`` or ``package.json``.
+                Defaults to ``pyproject.toml``.
 
             version_path (list[str]): Extra glob patterns for files whose
                 version fields should be updated. Defaults include
-                ``pyproject.toml``, ``setup.py``, ``setup.cfg``, and any
-                ``__init__.py``, ``version.py``, or ``_version.py`` files.
+                ``pyproject.toml``, ``package.json``, ``package-lock.json``,
+                ``setup.py``, ``setup.cfg``, and any ``__init__.py``,
+                ``version.py``, or ``_version.py`` files.
 
             version_ignore (list[str]): Glob patterns for paths to exclude from
                 version updates.

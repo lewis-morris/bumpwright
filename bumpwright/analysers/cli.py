@@ -202,9 +202,8 @@ def diff_cli(old: dict[str, Command], new: dict[str, Command]) -> list[Impact]:
         np = new[name].options
         removed_opts = sorted(op.keys() - np.keys(), key=lambda opt: (not op[opt], opt))
         for opt in removed_opts:
-            severity: BumpLevel = "major" if op[opt] else "minor"
             reason = "Removed required option" if op[opt] else "Removed optional option"
-            impacts.append(Impact(severity, name, f"{reason} '{opt}'"))
+            impacts.append(Impact("major", name, f"{reason} '{opt}'"))
         added_opts = sorted(np.keys() - op.keys(), key=lambda opt: (not np[opt], opt))
         for opt in added_opts:
             severity: BumpLevel = "major" if np[opt] else "minor"

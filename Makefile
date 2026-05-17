@@ -3,19 +3,18 @@
 .PHONY: lint format test cov docs
 
 lint:
-	ruff check .
+	uv run --no-sync ruff check .
 
 format:
-	black .
-	isort .
-	ruff check . --fix --exit-non-zero-on-fix
+	uv run --no-sync black .
+	uv run --no-sync isort .
+	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix
 
 test:
-	pytest -q
+	uv run --no-sync pytest -q
 
 cov:
-	pytest --cov=bumpwright --cov-report=term-missing
+	uv run --no-sync pytest --cov=bumpwright --cov-report=term-missing
 
 docs:
-	$(MAKE) -C docs html
-
+	uv run --no-sync sphinx-build -b html docs docs/_build/html

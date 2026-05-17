@@ -185,7 +185,7 @@ def test_diff_cli_removed_options() -> None:
     impacts = diff_cli(old, new)
     assert impacts == [
         Impact("major", "run", "Removed required option '--force'"),
-        Impact("minor", "run", "Removed optional option '--dry'"),
+        Impact("major", "run", "Removed optional option '--dry'"),
     ]
 
 

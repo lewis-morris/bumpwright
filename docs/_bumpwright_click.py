@@ -201,16 +201,16 @@ def decide(
     "--pyproject",
     default="pyproject.toml",
     show_default=True,
-    help="Path to the project's pyproject.toml file.",
+    help="Path to the project's pyproject.toml or package.json file.",
 )
 @click.option(
     "--version-path",
     multiple=True,
     help=(
         "Additional glob pattern for files containing the project version "
-        "(repeatable). Defaults include ``pyproject.toml``, ``setup.py``, "
-        "``setup.cfg``, and any ``__init__.py``, ``version.py``, or "
-        "``_version.py`` files."
+        "(repeatable). Defaults include ``pyproject.toml``, ``package.json``, "
+        "``package-lock.json``, ``setup.py``, ``setup.cfg``, and any "
+        "``__init__.py``, ``version.py``, or ``_version.py`` files."
     ),
 )
 @click.option(
@@ -298,13 +298,14 @@ def bump(args: argparse.Namespace, **kwargs: object) -> int:
             no_impl_change_patch (bool): When ``True``, ignore implementation-only
             changes to public symbols when determining the bump level.
 
-            pyproject (str): Path to ``pyproject.toml``. Defaults to
-            ``pyproject.toml``.
+            pyproject (str): Path to ``pyproject.toml`` or ``package.json``.
+            Defaults to ``pyproject.toml``.
 
             version_path (tuple[str, ...]): Extra glob patterns for files whose
             version fields should be updated. Defaults include
-            ``pyproject.toml``, ``setup.py``, ``setup.cfg``, and any
-            ``__init__.py``, ``version.py``, or ``_version.py`` files.
+            ``pyproject.toml``, ``package.json``, ``package-lock.json``,
+            ``setup.py``, ``setup.cfg``, and any ``__init__.py``,
+            ``version.py``, or ``_version.py`` files.
 
             version_ignore (tuple[str, ...]): Glob patterns for paths to exclude
             from version updates.

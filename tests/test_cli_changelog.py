@@ -376,7 +376,9 @@ def test_changelog_diff_and_contributors(tmp_path: Path) -> None:
         env=env,
     )
     content = (repo / "CHANGELOG.md").read_text()
-    compare_line = "[Diff since v0.1.0](https://github.com/me/project/compare/v0.1.0...v0.2.0)"
+    compare_line = (
+        "[Diff since v0.1.0](https://github.com/me/project/compare/v0.1.0...v0.2.0)"
+    )
     assert compare_line in content
     assert "### Contributors" in content
     assert "- [Alice](https://github.com/alice)" in content

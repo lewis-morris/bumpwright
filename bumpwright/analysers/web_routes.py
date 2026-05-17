@@ -151,7 +151,7 @@ def diff_routes(old: dict[tuple[str, str], Route], new: dict[tuple[str, str], Ro
             if op[p]:
                 impacts.append(Impact("major", symbol, f"Removed required param '{p}'"))
             else:
-                impacts.append(Impact("minor", symbol, f"Removed optional param '{p}'"))
+                impacts.append(Impact("major", symbol, f"Removed optional param '{p}'"))
         for p in np.keys() - op.keys():
             if np[p]:
                 impacts.append(Impact("major", symbol, f"Added required param '{p}'"))

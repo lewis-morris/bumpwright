@@ -215,7 +215,7 @@ def _build_bump_subparser(
     parser.add_argument(
         "--pyproject",
         default=os.getenv("BUMPWRIGHT_PYPROJECT", "pyproject.toml"),
-        help="Path to the project's pyproject.toml file.",
+        help="Path to the project's pyproject.toml or package.json file.",
     )
     parser.add_argument(
         "--version-path",
@@ -224,8 +224,9 @@ def _build_bump_subparser(
         default=_env_list("BUMPWRIGHT_VERSION_PATH"),
         help=(
             "Additional glob pattern for files containing the project version "
-            "(repeatable). Defaults include pyproject.toml, setup.py, setup.cfg, "
-            "and any __init__.py, version.py, or _version.py files."
+            "(repeatable). Defaults include pyproject.toml, package.json, "
+            "package-lock.json, setup.py, setup.cfg, and any __init__.py, "
+            "version.py, or _version.py files."
         ),
     )
     parser.add_argument(
